@@ -6,10 +6,6 @@ all:
           ansible_connection: local
     servers:
       hosts:
-        vpn:
-          ansible_host: 10.10.0.1
         files:
         test:
           ansible_connection: local
-        warden:
-
