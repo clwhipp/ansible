@@ -30,4 +30,4 @@
         mount_point: "{{ data_dir }}/nextcloud"
 
   vars_files: 
-    - ../vars/env-secrets.yml
+    - vars/env-secrets.yml
