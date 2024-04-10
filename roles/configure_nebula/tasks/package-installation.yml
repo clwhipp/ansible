@@ -1,0 +1,51 @@
+- name: Ensure {{ nebula_user }} home directory exists
+  file:
+    path: "/home/{{ nebula_user }}/Documents"
+    state: directory
+    owner: "{{ nebula_user }}"
+    group: "{{ nebula_user }}"
+    mode: '0750'
+
+- name: Copy Nebula binaries
+  ansible.builtin.copy:
+    src: v1.8.2-nebula-linux-amd64.tar.gz
+    dest: "/home/{{ nebula_user }}/Documents/nebula-linux-amd64.tar.gz"
+    owner: "{{ nebula_user }}"
+    group: "{{ nebula_user }}"
+    mode: '0600'
+
+- name: Open nebula archive
+  ansible.builtin.unarchive:
+    src: "/home/{{ nebula_user}}/Documents/nebula-linux-amd64.tar.gz"
+    dest: "/home/{{ nebula_user}}/Documents"
+    remote_src: yes
+
+- name: Ensure {{ nebula_install_dir }} exists
+  file:
+    path: "{{ nebula_install_dir }}"
+    state: directory
+    owner: "root"
+    group: "{{ nebula_user }}"
+    mode: '0750'
+
+- name: Install nebula binary
+  ansible.builtin.copy:
+    src: "/home/{{ nebula_user}}/Documents/nebula"
+    dest: "/usr/bin/nebula"
+    owner: "root"
+    group: "{{ nebula_user }}"
+    mode: '0550'
+    remote_src: true
+
+- name: Install nebula-cert binary
+  ansible.builtin.copy:
+    src: "/home/{{ nebula_user}}/Documents/nebula-cert"
+    dest: "/usr/bin/nebula-cert"
+    owner: "root"
+    group: "{{ nebula_user }}"
+    mode: '0555'
+    remote_src: true
+
+- name: Set capabilities on /usr/bin/nebula
+  ansible.builtin.shell:
+    cmd: sudo setcap cap_net_admin=eip /usr/bin/nebula

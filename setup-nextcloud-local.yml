@@ -1,0 +1,33 @@
+- hosts: test
+  become: true
+  roles:
+    - common
+    - configure_nebula
+    - configure_docker
+    - configure_nextcloud
+    - configure_tls_web_auth_ss
+    - configure_nfs_client
+
+  vars:
+    # Nebula managed at the host level
+
+    # Configuration values for nextcloud layer
+    nextcloud_db_user: "{{ nextcloud_db_user_v }}"
+    nextcloud_db_user_password: "{{ lookup('bitwarden_password', 'nextcloud_db_user_password') }}"
+    nextcloud_db_root_password: "{{ lookup('bitwarden_password', 'nextcloud_db_root_password') }}"
+    nextcloud_admin_user: "{{ nextcloud_admin_user_v }}"
+    nextcloud_admin_user_password: "{{ lookup('bitwarden_password', 'nextcloud_admin_user_password') }}"
+
+    # Configuration for TLS Self-Signed managed at host level
+
+    # Following is configuration for nfs_client role
+    nfs_mount_script: "/home/{{ user }}/mount_nfs_shares.sh"
+    nfs_server_address: "{{ nfs_server_ip }}"
+    nfs_mounts:
+      - share_name: "{{ data_dir }}/mariadb"
+        mount_point: "{{ data_dir }}/mariadb"
+      - share_name: "{{ data_dir }}/nextcloud"
+        mount_point: "{{ data_dir }}/nextcloud"
+
+  vars_files: 
+    - ../vars/env-secrets.yml

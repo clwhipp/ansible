@@ -1,0 +1,70 @@
+- name: Ensure required packages are installed
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - wget
+  - apt-transport-https
+  - gpg
+  - curl
+  - unzip
+  - vim
+
+- name: Download Visual Studio Code Debian package
+  get_url:
+    url: "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"
+    dest: "/tmp/code.deb"
+
+- name: Install Visual Studio Code
+  apt:
+    deb: "/tmp/code.deb"
+    state: present
+
+- name: Remove downloaded .deb file
+  file:
+    path: "/tmp/code.deb"
+    state: absent
+
+- name: Download Bitwarden CLI binary
+  get_url:
+    url: "https://vault.bitwarden.com/download/?app=cli&platform=linux"
+    dest: "/tmp/bw-linux.zip"
+
+- name: Extract Bitwarden CLI binary
+  unarchive:
+    src: "/tmp/bw-linux.zip"
+    dest: "/usr/local/bin"
+    remote_src: yes
+    creates: "/usr/local/bin/bw"
+
+- name: Make Bitwarden CLI binary executable
+  file:
+    path: "/usr/local/bin/bw"
+    owner: "root"
+    group: "root"
+    mode: "755"
+
+- name: Ensure bitwarden config directory is created
+  file:
+    path: "/home/{{ user }}/.config/bitwarden"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0700'
+
+- name: Copy ca.crt to target directory
+  copy:
+    src: "../vars/pki-ca-root-certificate.cer"
+    dest: "/home/{{ user }}/.config/bitwarden/ca.crt"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0400'
+
+- name: Add support for self-signed Bitwarden CA
+  lineinfile:
+    path: "/home/{{ user }}/.bashrc"
+    line: "export NODE_EXTRA_CA_CERTS=\"/home/{{ user }}/.config/bitwarden/ca.crt\""
+    insertafter: EOF
+    create: yes  # Create the file if it does not exist
+    state: present
+    backup: yes

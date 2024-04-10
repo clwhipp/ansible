@@ -1,0 +1,9 @@
+[Unit]
+Description=Nebula VPN
+
+[Service]
+User={{ nebula_user }}
+ExecStart=/usr/bin/nebula -config {{ nebula_install_dir }}/config.yaml
+
+[Install]
+WantedBy=default.target

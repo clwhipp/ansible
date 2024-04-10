@@ -1,0 +1,24 @@
+# Common variables
+user: "{{ user_v }}"
+user_uid: "{{ user_uid_v }}"
+user_shell: "/bin/bash"
+ssh_authorized_keys: "{{ ssh_authorized_keys_v }}"
+permit_ssh_password_login: "yes"
+domain: "{{ domain_v }}"
+  
+# Nebula Section
+nebula_lighthouse: "vpn.{{ domain }}"
+nebula_sign_enable: false
+nebula_sign_profile: ""
+nebula_is_lighthouse: false
+nebula_user: "nebula"
+nebula_install_dir: "/etc/nebula"
+nebula_tunnel_name: nebula1
+nebula_log_level: info
+nebula_port: "{{ nebula_port_v }}"
+nebula_inbound_rules:
+
+  - port: 22
+    proto: tcp
+    group: acl:admin
+

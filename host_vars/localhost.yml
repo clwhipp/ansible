@@ -1,0 +1,39 @@
+# Overrides settings within group_vars/all.yml
+nebula_sign_enable: false
+nebula_sign_profile: "test.{{ domain }}"
+nebula_inbound_rules:
+
+  - port: 22
+    proto: tcp
+    group: acl:admin
+
+  - port: 443
+    proto: tcp
+    group: acl:nextcloud
+
+  - port: 8443
+    proto: tcp
+    group: acl:nextcloud
+
+service_linux_accounts:
+  - name: "nc"
+    uid: 1502
+    shell: "/sbin/nologin"
+  - name: "db"
+    uid: 1503
+    shell: "/sbin/nologin"
+
+data_mounts:
+  - location: "{{ data_dir }}"
+    owner: "root"
+    mode: '0755'
+  - location: "{{ data_dir }}/nextcloud"
+    owner: "nc"
+    mode: '0700'
+  - location: "{{ data_dir }}/mariadb"
+    owner: "db"
+    mode: '0700'
+
+# Certificate Signing Request Section
+csr_cn: "Nextcloud"
+domain: "test.{{ domain }}"

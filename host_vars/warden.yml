@@ -1,0 +1,38 @@
+# Overrides settings within group_vars/all.yml
+nebula_sign_enable: true
+nebula_sign_profile: "warden.{{ domain }}"
+nebula_install_dir: "TBD"
+nebula_inbound_rules:
+
+  - port: 22
+    proto: tcp
+    group: acl:admin
+
+  - port: 443
+    proto: tcp
+    group: acl:bitwarden
+
+  - port: 8080
+    proto: tcp
+    group: acl:bitwarden
+
+  - port: 3012
+    proto: tcp
+    group: acl:bitwarden
+
+service_linux_accounts:
+  - name: "bw"
+    uid: 1500
+    shell: "/sbin/nologin"
+
+data_mounts:
+  - location: "{{ data_dir }}"
+    owner: "root"
+    mode: '0755'
+  - location: "{{ data_dir }}/bitwarden"
+    owner: "bw"
+    mode: '0700'
+
+# Certificate Signing Request Section
+csr_cn: "Bitwarden"
+svc_domain: "warden.{{ domain }}"

@@ -1,0 +1,53 @@
+- name: Create working directory
+  ansible.builtin.file:
+    path: ".nebula"
+    state: directory
+    mode: '0700'
+  delegate_to: localhost
+  become: false
+
+- name: Download host public key to ansible host
+  ansible.builtin.fetch:
+    src: "/home/{{ user }}/Documents/exports/{{ inventory_hostname }}-host.pub"
+    dest: "./.nebula/{{ inventory_hostname }}-host.pub"
+    flat: yes
+
+- name: Download Nebula CA files from Bitwarden
+  bitwarden_download_attachments:
+    name: "NEBULA_CA"
+    dir_path: ".nebula"
+  delegate_to: localhost
+  become: false
+
+- name: Generate devices certificate from profile
+  nebula_sign:
+    profile: "{{ nebula_sign_profile }}"
+    config: ".nebula/issuance-profiles.yaml"
+    ca_key: ".nebula/ca.key"
+    ca_crt: ".nebula/ca.crt"
+    public: "./.nebula/{{ inventory_hostname }}-host.pub"
+    out_crt: "./.nebula/{{ inventory_hostname }}-host.crt"
+  delegate_to: localhost
+  no_log: true
+  become: false
+
+# - name: Upload issuance-profile to capture log
+#   bitwarden_update_attachment:
+#     name: "NEBULA_CA"
+#     file_path: ".nebula/issuance-profiles.yaml"
+#   delegate_to: localhost
+#   become: false
+
+- name: Upload host certificate to host
+  ansible.builtin.copy:
+    src: "./.nebula/{{ inventory_hostname }}-host.crt"
+    dest: "{{ nebula_install_dir }}/host.crt"
+    owner: "root"
+    group: "{{ nebula_user }}"
+    mode: '0750'
+
+- name: Delete nebula directory
+  file:
+    path: "./.nebula"
+    state: absent
+  delegate_to: localhost

@@ -1,0 +1,3 @@
+# Overrides settings within group_vars/all.yml
+nebula_sign_enable: true
+nebula_sign_profile: "alien17.linux.{{ domain }}"

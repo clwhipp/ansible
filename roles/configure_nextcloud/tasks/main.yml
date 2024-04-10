@@ -1,0 +1,33 @@
+- name: Ensure {{ root_install_dir }} exists
+  file:
+    path: "{{ root_install_dir }}"
+    state: directory
+    owner: "root"
+    group: "{{ user }}"
+    mode: '0750'
+
+# Create Nextcloud and MariaDB system accounts
+- name: Ensure user accounts exist
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    uid: "{{ item.uid }}"
+    shell: "{{ item.shell | default(omit) }}"
+    create_home: false
+    state: present
+  loop: "{{ service_linux_accounts }}"
+
+# Create data directories for services
+- name: Ensure data directories exist
+  file:
+    path: "{{ item.location }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    group: "{{ item.owner }}"
+    mode: "{{ item.mode }}"
+  loop: "{{ data_mounts }}"
+
+- name: Setup Service Secrets
+  import_tasks: secrets.yml
+
+- name: Setup Repositories
+  import_tasks: repo.yml

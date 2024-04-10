@@ -1,0 +1,27 @@
+- name: Ensure the user {{ nebula_user }} exists
+  user:
+    name: "{{ nebula_user }}"
+    shell: /sbin/nologin
+    uid: 2000
+    create_home: yes
+    state: present
+
+- name: Setup Nebula Binaries
+  import_tasks: package-installation.yml
+
+- name: Generate Host Nebula Keys
+  import_tasks: generate-keys.yml
+
+- name: Generate Host Configuration
+  import_tasks: host-config.yml
+
+- name: Deploy nebula systemd service
+  ansible.builtin.template:
+    src: nebula.service.j2
+    dest: "/etc/systemd/system/nebula.service"
+    owner: root
+    group: root
+    mode: '0644'
+
+- include_tasks: sign-keys.yml
+  when: nebula_sign_enable

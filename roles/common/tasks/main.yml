@@ -1,0 +1,11 @@
+- name: Ensure the user {{ user }} exists
+  user:
+    name: "{{ user }}"
+    state: present
+    uid: "{{ user_uid }}"
+    shell: "{{ user_shell }}"
+    groups: sudo
+    create_home: yes
+
+- name: Setup SSH and Fail2Ban
+  import_tasks: ssh.yml

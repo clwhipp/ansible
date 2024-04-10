@@ -1,0 +1,15 @@
+# Default user account information
+user: "admin"
+user_uid: 3000
+user_shell: "/bin/bash"
+
+# Default SSH configuration
+ssh_authorized_keys:
+  - ""
+ssh_port: 22
+permit_ssh_password_login: "yes"
+
+# Manages Fail2Ban settings for failed SSH logins
+ssh_bantime: "1d"
+ssh_findtime: "1d"
+ssh_maxretry: "3"

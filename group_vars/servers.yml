@@ -1,0 +1,20 @@
+# Network Services (Global)
+root_install_dir: "{{ root_install_dir_v }}"
+secrets_dir: "{{ root_install_dir }}/secrets"
+tls_certs_dir: "{{ root_install_dir }}/certs"
+admin_repo_dir: "{{ root_install_dir }}/services"
+data_dir: "/mnt/critical"
+data_mounts:
+  - location: "{{ data_dir }}"
+    owner: "root"
+    mode: '0755'
+admin_repo_url: "{{ admin_repo_url_v }}"
+
+# Configuring Certificate Signing Request
+csr_country: "{{ csr_country_v }}"
+csr_state: "{{ csr_state_v }}"
+csr_city: "{{ csr_city_v }}"
+csr_org: "{{ csr_org_v }}"
+
+# NFS Settings
+nfs_server_ip: "{{ nfs_server_ip_v }}"

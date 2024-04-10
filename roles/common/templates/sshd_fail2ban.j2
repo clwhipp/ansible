@@ -1,0 +1,8 @@
+[sshd]
+enabled = true
+port = ssh
+action = iptables-multiport
+logpath = /var/log/auth.log
+bantime = {{ ssh_bantime | default('1d') }}
+findtime = {{ ssh_findtime | default('1d') }}
+maxretry = {{ ssh_maxretry | default('3') }}

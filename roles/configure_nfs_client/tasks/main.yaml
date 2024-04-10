@@ -1,0 +1,28 @@
+- name: Update apt package index
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install NFS Client Software
+  ansible.builtin.apt:
+    name:
+      - nfs-common
+    state: present
+
+- name: Removing {{ nfs_mount_script }}
+  file:
+    path: "{{ nfs_mount_script }}"
+    state: absent
+
+- name: Generating NFS mount script at {{ nfs_mount_script }}
+  generate_mount_script:
+    server_addr: "{{ nfs_server_address }}"
+    share_name: "{{ item.share_name }}"
+    mount_point: "{{ item.mount_point }}"
+    mount_script: "{{ nfs_mount_script }}"
+  loop: "{{ nfs_mounts }}"
+
+- name: Ensure {{ nfs_mount_script }} has appropriate permissions
+  file:
+    path: "{{ nfs_mount_script }}"
+    state: file
+    mode: '0555'

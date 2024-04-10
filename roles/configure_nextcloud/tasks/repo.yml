@@ -1,0 +1,77 @@
+- name: Downloading Github Access Key
+  bitwarden_download_attachment:
+    name: "GITHUB_SSH"
+    filename: "id_ed25519"
+    file_path: "./id_ed25519"
+  no_log: true
+  delegate_to: localhost
+  become: false
+
+- name: Ensure .ssh directory exists for root
+  ansible.builtin.file:
+    path: "/home/root/.ssh"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: '0700'
+
+- name: Install Github Access for root
+  ansible.builtin.copy:
+    src: "./id_ed25519"
+    dest: "/home/root/.ssh/id_ed25519"
+    owner: "root"
+    group: "root"
+    mode: '0700'
+
+- name: Ensure .ssh directory exists for {{ user }}
+  ansible.builtin.file:
+    path: "/home/{{ user }}/.ssh"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0700'
+
+- name: Install Github Access for {{ user }}
+  ansible.builtin.copy:
+    src: "./id_ed25519"
+    dest: "/home/{{ user }}/.ssh/id_ed25519"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0700'
+
+- name: Ensure {{ admin_repo_dir }} exists
+  file:
+    path: "{{ admin_repo_dir }}"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: '0700'
+
+- name: Cloning {{ admin_repo_url }} to {{ admin_repo_dir }}
+  ansible.builtin.git:
+    repo: "{{ admin_repo_url }}"
+    dest: "{{ admin_repo_dir }}"
+    key_file: "/home/root/.ssh/id_ed25519"
+    version: scc-1.7.2
+    accept_hostkey: yes
+    clone: yes
+    update: yes
+
+- name: Transfer repo ownership to {{ user }}
+  ansible.builtin.file:
+    path: "{{ admin_repo_dir }}"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0700'
+    recurse: yes
+
+- name: Delete private key in root account
+  file:
+    path: "/home/root/.ssh/id_ed25519"
+    state: absent
+
+- name: Delete private key on localhost
+  file:
+    path: "./id_ed25519"
+    state: absent
