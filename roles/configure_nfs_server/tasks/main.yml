@@ -1,0 +1,24 @@
+- name: Update apt package index
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install NFS Server Software
+  ansible.builtin.apt:
+    name:
+      - nfs-kernel-server
+    state: present
+
+- name: Remove NFS Exports
+  file:
+    path: "/etc/exports"
+    state: absent
+  notify:
+    - restart nfs
+
+- name: Generating NFS Server Exports
+  community.general.nfs_export:
+    path: "{{ item.path }}"
+    clients:
+      - host: "{{ item.client_ip }}"
+        options: "{{ item.options }}"
+  loop: "{{ nfs_server_mounts }}"

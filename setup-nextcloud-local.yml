@@ -23,7 +23,7 @@
     # Following is configuration for nfs_client role
     nfs_mount_script: "/home/{{ user }}/mount_nfs_shares.sh"
     nfs_server_address: "{{ nfs_server_ip }}"
-    nfs_mounts:
+    nfs_client_mounts:
       - share_name: "{{ data_dir }}/mariadb"
         mount_point: "{{ data_dir }}/mariadb"
       - share_name: "{{ data_dir }}/nextcloud"

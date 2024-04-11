@@ -19,7 +19,7 @@
     share_name: "{{ item.share_name }}"
     mount_point: "{{ item.mount_point }}"
     mount_script: "{{ nfs_mount_script }}"
-  loop: "{{ nfs_mounts }}"
+  loop: "{{ nfs_client_mounts }}"
 
 - name: Ensure {{ nfs_mount_script }} has appropriate permissions
   file:

@@ -18,3 +18,6 @@ csr_org: "{{ csr_org_v }}"
 
 # NFS Settings
 nfs_server_ip: "{{ nfs_server_ip_v }}"
+files_ip_address: "{{ files_ip_address_v }}"
+media_ip_address: "{{ media_ip_address_v }}"
+code_ip_address: "{{ code_ip_address_v }}"
