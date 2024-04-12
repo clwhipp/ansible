@@ -1,11 +1,20 @@
 - name: Ensure the user {{ user }} exists
   user:
     name: "{{ user }}"
-    state: present
+    password: "{{ user_password }}"
     uid: "{{ user_uid }}"
     shell: "{{ user_shell }}"
     groups: sudo
     create_home: yes
+    state: present
+
+- name: Copy .bashrc from /etc/skel to {{ user }} home directory
+  ansible.builtin.copy:
+    src: "/etc/skel/.bashrc"
+    dest: "/home/{{ user }}/.bashrc"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0644'
 
 - name: Setup SSH and Fail2Ban
   import_tasks: ssh.yml

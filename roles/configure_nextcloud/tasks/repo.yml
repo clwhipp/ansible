@@ -39,6 +39,11 @@
     group: "{{ user }}"
     mode: '0700'
 
+- name: Removing {{ admin_repo_dir }}
+  file:
+    path: "{{ admin_repo_dir }}"
+    state: absent
+
 - name: Ensure {{ admin_repo_dir }} exists
   file:
     path: "{{ admin_repo_dir }}"
@@ -52,7 +57,7 @@
     repo: "{{ admin_repo_url }}"
     dest: "{{ admin_repo_dir }}"
     key_file: "/home/root/.ssh/id_ed25519"
-    version: scc-1.7.2
+    version: dev-1.8.0
     accept_hostkey: yes
     clone: yes
     update: yes
@@ -75,3 +80,12 @@
   file:
     path: "./id_ed25519"
     state: absent
+  delegate_to: localhost
+
+- name: Deploy {{ root_install_dir }}/envvars.sh
+  ansible.builtin.template:
+    src: "envvars.sh.j2"
+    dest: "{{ root_install_dir }}/envvars.sh"
+    owner: root
+    group: "root"
+    mode: '0400'

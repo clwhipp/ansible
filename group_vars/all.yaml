@@ -2,6 +2,7 @@
 user: "{{ user_v }}"
 user_uid: "{{ user_uid_v }}"
 user_shell: "/bin/bash"
+user_password: "{{ lookup('bitwarden_field', 'hash', 'linux_user_password') }}"
 ssh_authorized_keys: "{{ ssh_authorized_keys_v }}"
 permit_ssh_password_login: "yes"
 domain: "{{ domain_v }}"

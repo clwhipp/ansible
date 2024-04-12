@@ -22,29 +22,12 @@ There are a few configurable parameter for this role in the system.
 | Name | Default | Description |
 | ------|-----------|-----------|
 | user | admin | Defines name of account to create and provide access to. |
+| user_uid | 3000 | Defines the UID for the account. |
+| user_shell | /bin/bash | Defines shell to be assigned to the account |
+| user_password | | Containers SHA512 of password for user. Created with 'mkpasswd --method=sha-512 <password>' |
 | ssh_authorized_keys | Empty | List of public keys that should be added to authorized_keys for the user |
 | ssh_port | 22 | Port on which SSH should listen |
 | permit_ssh_password_login | yes | System accepts password for ssh authentication in addition to private/public key |
-
-
-Example Playbook
-----------------
-
-The following is an example use of this role to setup an account called cameron
-on a system. This particular setup will also not allow password based authentication
-on the system at it's completion.
-
-```
-- hosts: local
-  become: true
-  roles:
-    - configure_ssh
-  vars:
-    user: "cameron"
-    permit_ssh_password_login: "no"
-    ssh_authorized_keys:
-      - "ssh ..."
-```      
 
 License
 -------
@@ -54,4 +37,4 @@ BSD
 Author Information
 ------------------
 
-Cameron Whipple <cameron@starkcybercorp.net>
+Cameron Whipple <clwhipple@protonmail.com>
