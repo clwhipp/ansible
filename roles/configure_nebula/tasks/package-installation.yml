@@ -8,7 +8,7 @@
 
 - name: Copy Nebula binaries
   ansible.builtin.copy:
-    src: v1.8.2-nebula-linux-amd64.tar.gz
+    src: linux-amd64-v1.8.2+.tar.gz
     dest: "/home/{{ nebula_user }}/Documents/nebula-linux-amd64.tar.gz"
     owner: "{{ nebula_user }}"
     group: "{{ nebula_user }}"
@@ -30,7 +30,7 @@
 
 - name: Install nebula binary
   ansible.builtin.copy:
-    src: "/home/{{ nebula_user}}/Documents/nebula"
+    src: "/home/{{ nebula_user }}/Documents/nebula"
     dest: "/usr/bin/nebula"
     owner: "root"
     group: "{{ nebula_user }}"

@@ -21,3 +21,6 @@ nfs_server_ip: "{{ nfs_server_ip_v }}"
 files_ip_address: "{{ files_ip_address_v }}"
 media_ip_address: "{{ media_ip_address_v }}"
 code_ip_address: "{{ code_ip_address_v }}"
+
+# Nebula
+nebula_ca_key_password: "{{ lookup('bitwarden_password', 'NEBULA_CA') }}"

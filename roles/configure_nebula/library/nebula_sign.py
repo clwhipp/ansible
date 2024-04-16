@@ -202,7 +202,7 @@ class NebulaCertificate(object):
     def __str__(self):
         return self.name + " with public " + self.public_encoded
 
-def sign_cert(profile, config, ca_key, ca_crt, public, out_crt):
+def sign_cert(profile, config, ca_key, ca_key_pass, ca_crt, public, out_crt):
 
     if not os.path.exists(config):
         return False, "Cert configuration couldn't be found at " + config
@@ -220,7 +220,7 @@ def sign_cert(profile, config, ca_key, ca_crt, public, out_crt):
     dev_ip = device_profile['vpn_ip']
     dev_duration = device_profile['validity']
 
-    cmd = ['nebula-cert', 'sign', '-ca-crt', ca_crt, '-ca-key', ca_key, '-duration', dev_duration, '-groups', dev_grps_csv, '-in-pub', public, '-ip', dev_ip, '-name', dev_name, '-out-crt', out_crt]
+    cmd = ['nebula-cert', 'sign', '-ca-crt', ca_crt, '-ca-key', ca_key, '-ca-key-pass', ca_key_pass, '-duration', dev_duration, '-groups', dev_grps_csv, '-in-pub', public, '-ip', dev_ip, '-name', dev_name, '-out-crt', out_crt]
     try:
         # Issue the certificate with private keys
         subprocess.run(cmd, check=True)
@@ -253,6 +253,7 @@ def main():
         profile=dict(type='str', required=True),
         config=dict(type='str', required=True),
         ca_key=dict(type='str', required=True),
+        ca_key_pass=dict(type='str', required=True),
         ca_crt=dict(type='str', required=True),
         public=dict(type='str', required=True),
         out_crt=dict(type='str', required=True)
@@ -271,6 +272,7 @@ def main():
     profile = module.params['profile']
     config = module.params['config']
     ca_key = module.params['ca_key']
+    ca_key_pass = module.params['ca_key_pass']
     ca_crt = module.params['ca_crt']
     public = module.params['public']
     out_crt = module.params['out_crt']
@@ -278,7 +280,7 @@ def main():
     if module.check_mode:
         module.exit_json(**result)
 
-    success, error = sign_cert(profile, config, ca_key, ca_crt, public, out_crt)
+    success, error = sign_cert(profile, config, ca_key, ca_key_pass, ca_crt, public, out_crt)
 
     if success:
         result['changed'] = True

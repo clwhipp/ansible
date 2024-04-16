@@ -24,6 +24,7 @@
     profile: "{{ nebula_sign_profile }}"
     config: ".nebula/issuance-profiles.yaml"
     ca_key: ".nebula/ca.key"
+    ca_key_pass: "{{ nebula_ca_key_password }}"
     ca_crt: ".nebula/ca.crt"
     public: "./.nebula/{{ inventory_hostname }}-host.pub"
     out_crt: "./.nebula/{{ inventory_hostname }}-host.crt"
