@@ -59,6 +59,7 @@
   openssl_sign:
     csr_path: ".pki/{{ svc_domain }}-tls.csr"
     ca_key: ".pki/pki.pem"
+    ca_key_pass: "{{ domain_ca_key_password }}"
     ca_crt: ".pki/pki.crt"
     tls_ext: ".pki/{{ svc_domain }}-tls-ext.txt"
     out_crt: "{{ svc_domain }}.crt"

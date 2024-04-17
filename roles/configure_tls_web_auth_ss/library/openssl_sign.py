@@ -1,10 +1,9 @@
 from ansible.module_utils.basic import AnsibleModule
 import subprocess
-from datetime import datetime
 
-def sign_cert(csr_path, ca_key, ca_crt, tls_ext, out_crt):
+def sign_cert(csr_path, ca_key, ca_key_pass, ca_crt, tls_ext, out_crt):
 
-    cmd = ['openssl', 'x509', '-req', '-in', csr_path, '-CA', ca_crt, '-CAkey', ca_key, '-CAcreateserial', '-out', out_crt, '-days', '400', '-sha256', '-extfile', tls_ext]
+    cmd = ['openssl', 'x509', '-req', '-in', csr_path, '-CA', ca_crt, '-CAkey', ca_key, '-CAcreateserial', '-out', out_crt, '-days', '400', '-sha256', '-extfile', tls_ext, '-passin', 'pass:' + ca_key_pass]
     try:
         # Issue the certificate with private keys
         subprocess.run(cmd, check=True)
@@ -17,6 +16,7 @@ def main():
     module_args = dict(
         csr_path=dict(type='str', required=True),
         ca_key=dict(type='str', required=True),
+        ca_key_pass=dict(type='str', required=True),
         ca_crt=dict(type='str', required=True),
         tls_ext=dict(type='str', required=True),
         out_crt=dict(type='str', required=True)
@@ -34,6 +34,7 @@ def main():
 
     csr_path = module.params['csr_path']
     ca_key = module.params['ca_key']
+    ca_key_pass = module.params['ca_key_pass']
     ca_crt = module.params['ca_crt']
     tls_ext = module.params['tls_ext']
     out_crt = module.params['out_crt']
@@ -41,7 +42,7 @@ def main():
     if module.check_mode:
         module.exit_json(**result)
 
-    success, error = sign_cert(csr_path, ca_key, ca_crt, tls_ext, out_crt)
+    success, error = sign_cert(csr_path, ca_key, ca_key_pass, ca_crt, tls_ext, out_crt)
 
     if success:
         result['changed'] = True

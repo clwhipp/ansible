@@ -15,6 +15,7 @@ csr_country: "{{ csr_country_v }}"
 csr_state: "{{ csr_state_v }}"
 csr_city: "{{ csr_city_v }}"
 csr_org: "{{ csr_org_v }}"
+domain_ca_key_password: "{{ lookup('bitwarden_password', 'DOMAIN_CA') }}"
 
 # NFS Settings
 nfs_server_ip: "{{ nfs_server_ip_v }}"
