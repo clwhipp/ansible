@@ -6,7 +6,8 @@ user_password: "{{ lookup('bitwarden_field', 'hash', 'linux_user_password') }}"
 ssh_authorized_keys: "{{ ssh_authorized_keys_v }}"
 permit_ssh_password_login: "yes"
 domain: "{{ domain_v }}"
-  
+lan_range_cidr: "{{ lan_range_cidr_v }}"
+
 # Nebula Section
 nebula_lighthouse: "vpn.{{ domain }}"
 nebula_sign_enable: false
@@ -17,9 +18,11 @@ nebula_install_dir: "/etc/nebula"
 nebula_tunnel_name: nebula1
 nebula_log_level: info
 nebula_port: "{{ nebula_port_v }}"
+nebula_range_cidr: "{{ nebula_range_cidr_v }}"
 nebula_inbound_rules:
 
-  - port: 22
+  - port: "{{ ssh_port }}"
     proto: tcp
     group: acl:admin
 
+# IPTables Section
