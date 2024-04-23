@@ -28,13 +28,3 @@ There are a few configurable parameter for this role in the system.
 | ssh_authorized_keys | Empty | List of public keys that should be added to authorized_keys for the user |
 | ssh_port | 22 | Port on which SSH should listen |
 | permit_ssh_password_login | yes | System accepts password for ssh authentication in addition to private/public key |
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-Cameron Whipple <clwhipple@protonmail.com>
