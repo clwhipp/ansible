@@ -1,3 +1,5 @@
+ansible_become_pass: "{{ lookup('bitwarden_password', 'files_linux_user_password') }}"
+
 # Common Overrides
 hostname: "files"
 fqdn: "{{ hostname }}.{{ domain }}"
@@ -19,6 +21,19 @@ nebula_inbound_rules:
   - port: 8443
     proto: tcp
     group: acl:nextcloud
+
+  - port: "{{ ssh_port }}"
+    proto: tcp
+    group: admin
+
+  - port: 443
+    proto: tcp
+    group: nextcloud
+
+  - port: 8443
+    proto: tcp
+    group: nextcloud
+
 
 # Service Configurations
 service_linux_accounts:
@@ -43,3 +58,4 @@ data_mounts:
 # Certificate Signing Request Section
 csr_cn: "Nextcloud"
 svc_domain: "{{ fqdn }}"
+svc_account: "nc"

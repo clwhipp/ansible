@@ -1,4 +1,11 @@
-- name: Create working directory
+- name: Delete nebula working directory on ansible host
+  file:
+    path: "./.nebula"
+    state: absent
+  delegate_to: localhost
+  become: false
+
+- name: Create nebula working directory on ansible host
   ansible.builtin.file:
     path: ".nebula"
     state: directory
@@ -29,8 +36,8 @@
     public: "./.nebula/{{ inventory_hostname }}-host.pub"
     out_crt: "./.nebula/{{ inventory_hostname }}-host.crt"
   delegate_to: localhost
-  no_log: true
   become: false
+  no_log: true
 
 # - name: Upload issuance-profile to capture log
 #   bitwarden_update_attachment:
@@ -52,3 +59,4 @@
     path: "./.nebula"
     state: absent
   delegate_to: localhost
+  become: false

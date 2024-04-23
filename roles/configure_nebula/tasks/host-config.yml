@@ -21,6 +21,11 @@
     path: "{{ nebula_install_dir }}/config.yaml"
     rules: "{{ nebula_inbound_rules }}"
 
+- name: Check if Nebula CA Certificate already downloaded
+  ansible.builtin.stat:
+    path: "./ca.crt"
+  register: nebula_ca_crt
+
 - name: Downloading Nebula CA Certificate
   bitwarden_download_attachment:
     name: "NEBULA_CA"
@@ -28,6 +33,7 @@
     file_path: "./ca.crt"
   become: false
   delegate_to: localhost
+  when: not nebula_ca_crt.stat.exists
 
 - name: Installing Nebula CA Certificate
   ansible.builtin.copy:
@@ -36,3 +42,4 @@
     owner: "root"
     group: "{{ nebula_user }}"
     mode: "0540"
+

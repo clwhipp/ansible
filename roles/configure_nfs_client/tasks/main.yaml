@@ -26,3 +26,5 @@
     path: "{{ nfs_mount_script }}"
     state: file
     mode: '0555'
+    owner: "{{ user }}"
+

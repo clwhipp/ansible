@@ -7,7 +7,7 @@
     mode: '0750'
 
 # Create Nextcloud and MariaDB system accounts
-- name: Ensure user accounts exist
+- name: Ensure service accounts exist
   ansible.builtin.user:
     name: "{{ item.name }}"
     uid: "{{ item.uid }}"

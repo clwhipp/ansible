@@ -1,15 +1,11 @@
 #!/bin/bash
 
 function is_docker_installed(){
-    validate_root_with_exit
-
     iptables -S | grep -q -i "^-N *docker-user"
     return $?
 }
 
 function iptables_reset_rules(){
-    validate_root_with_exit
-
     for chain in 'INPUT' 'OUTPUT' 'FORWARD';
     do
         # Reset default policy
@@ -30,7 +26,6 @@ function iptables_reset_rules(){
 }
 
 function iptables_add_default_rules(){
-    validate_root_with_exit
 
     # Allow outbound
     iptables -P OUTPUT ACCEPT
@@ -59,8 +54,6 @@ function iptables_add_default_rules(){
 }
 
 function iptables_save_rules(){
-    validate_root_with_exit
-
     mkdir -p /etc/iptables
     iptables-save > /etc/iptables/rules.v4
     chown root:root /etc/iptables/rules.v4
@@ -68,15 +61,11 @@ function iptables_save_rules(){
 }
 
 function iptables_enable_systemd(){
-    validate_root_with_exit
-
     systemctl start iptables-restore
     systemctl enable iptables-restore
 }
 
 function iptables_apply_default(){
-    validate_root_with_exit
-
     iptables_reset_rules
     iptables_add_default_rules
     iptables_save_rules

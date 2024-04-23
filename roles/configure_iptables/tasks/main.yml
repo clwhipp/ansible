@@ -8,7 +8,7 @@
 
 - name: Install IPTables Setup Script
   ansible.builtin.template:
-    src: iptables-setup.sh.j2
+    src: "iptables-setup.sh.j2"
     dest: "{{ root_install_dir }}/iptables-setup.sh"
     owner: "root"
     group: "root"
