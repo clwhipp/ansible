@@ -16,4 +16,14 @@ function install_software(){
 
 }
 
-install_software
+function install_root(){
+    config_dir="/home/$(whoami)/.config"
+    mkdir -p $config_dir
+    cp pki-root.crt $config_dir/pki-root.crt
+    chmod 700 $config_dir/pki-root.crt
+    echo "export NODE_EXTRA_CA_CERTS=\"$config_dir/pki-root.crt\"" >> ~/.bashrc
+}
+
+#install_software
+install_root
+

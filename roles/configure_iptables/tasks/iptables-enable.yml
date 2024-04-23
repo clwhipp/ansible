@@ -1,0 +1,70 @@
+- name: Install iptables-persistent
+  ansible.builtin.package:
+    name: iptables-persistent
+    state: present
+
+- name: Backup current iptables configuration
+  command: iptables-save > /etc/iptables/backup_{{ ansible_date_time.iso8601_basic_short }}.iptables
+  args:
+    creates: /etc/iptables/backup_{{ ansible_date_time.iso8601_basic_short }}.iptables
+
+- name: Flush all current iptables rules
+  command: iptables -F
+
+- name: Ensure default accept policy on INPUT, FORWARD and OUTPUT chains
+  iptables:
+    chain: "{{ item }}"
+    policy: accept
+    flush: yes
+  loop:
+    - INPUT
+    - FORWARD
+    - OUTPUT
+
+- name: Allow established and related connections
+  iptables:
+    chain: INPUT
+    ctstate: ['ESTABLISHED', 'RELATED']
+    jump: ACCEPT
+    state: present
+    comment: Allow established and related connections
+
+- name: Allow established and related connections in DOCKER-USER chain if Docker support is enabled
+  iptables:
+    table: filter
+    chain: DOCKER-USER
+    ctstate: ['ESTABLISHED', 'RELATED']
+    jump: ACCEPT
+    state: present
+    comment: Allow established and related connections for Docker
+  when: iptables_enable_docker_support
+
+- name: Allowing requests from local DNS resolver with sport of 53
+  iptables:
+    chain: INPUT
+    source: 127.0.0.0/24
+    source_port: 53
+
+- name: Allowing requests from local DNS resolver with dport of 53
+  iptables:
+    chain: INPUT
+    source: 127.0.0.0/24
+    destination_port: 53
+
+- name: Opening up ports as configured within iptables_inbound_rules
+  iptables:
+    chain: INPUT
+    protocol: "{{ item.proto }}"
+    destination_port: "{{ item.port }}"
+    source: "{{ item.source }}"
+    jump: ACCEPT
+    state: present
+    comment: Allow access to {{ item.port }} from {{ item.source }}
+  loop: "{{ iptables_inbound_rules }}"
+
+- name: Drop all other inbound traffic
+  iptables:
+    chain: INPUT
+    jump: DROP
+    state: present
+    comment: Drop all other inbound traffic

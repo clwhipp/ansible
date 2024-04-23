@@ -34,7 +34,7 @@
     dest: "/usr/bin/nebula"
     owner: "root"
     group: "{{ nebula_user }}"
-    mode: '0550'
+    mode: '0555'
     remote_src: true
 
 - name: Install nebula-cert binary

@@ -7,5 +7,5 @@ all:
     servers:
       hosts:
         files:
-        test:
-          ansible_connection: local
+          ansible_host: {{ files_ip_address }}
+

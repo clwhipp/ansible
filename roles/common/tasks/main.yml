@@ -2,7 +2,6 @@
   user:
     name: "{{ user }}"
     password: "{{ user_password }}"
-    uid: "{{ user_uid }}"
     shell: "{{ user_shell }}"
     groups: sudo
     create_home: yes
@@ -15,6 +14,10 @@
     owner: "{{ user }}"
     group: "{{ user }}"
     mode: '0644'
+
+- name: Configure Hostname to {{ hostname }}
+  hostname:
+    name: "{{ hostname }}"
 
 - name: Setup SSH and Fail2Ban
   import_tasks: ssh.yml

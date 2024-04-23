@@ -1,0 +1,75 @@
+#!/bin/bash
+
+function is_docker_installed(){
+    iptables -S | grep -q -i "^-N *docker-user"
+    return $?
+}
+
+function iptables_reset_rules(){
+    for chain in 'INPUT' 'OUTPUT' 'FORWARD';
+    do
+        # Reset default policy
+        iptables -P $chain ACCEPT
+
+        # Flush the chains
+        iptables -F $chain
+
+        # Zero chains counters
+        iptables -Z $chain
+    done
+
+    # Reset all the rules associated with docker
+    is_docker_installed
+    if [[ $? -eq 0 ]]; then
+        iptables -t filter -F DOCKER-USER
+    fi
+}
+
+function iptables_add_default_rules(){
+
+    # Allow outbound
+    iptables -P OUTPUT ACCEPT
+
+    # Allow establshed connections
+    iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+    is_docker_installed
+    if [ $? -eq 0 ]; then
+        iptables -t filter -A DOCKER-USER -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+    fi
+
+    # allow hosts to find the nebula endpoint
+    iptables -A INPUT -s {{ lan_range_cidr }} -p udp --dport {{ nebula_port }} -j ACCEPT
+
+    # allow nebula protected traffic to be received
+    iptables -A INPUT -s {{ nebula_range_cidr }} -j ACCEPT
+
+    # enable dns resolution with local resolver
+    iptables -A INPUT -s 127.0.0.0/24 -p udp --sport 53 -j ACCEPT
+    iptables -A INPUT -s 127.0.0.0/24 -p udp --dport 53 -j ACCEPT
+    iptables -A INPUT -s 127.0.0.0/24 -p tcp --sport 53 -j ACCEPT
+    iptables -A INPUT -s 127.0.0.0/24 -p tcp --dport 53 -j ACCEPT
+
+    # adjust default policies
+    iptables -P INPUT DROP
+}
+
+function iptables_save_rules(){
+    mkdir -p /etc/iptables
+    iptables-save > /etc/iptables/rules.v4
+    chown root:root /etc/iptables/rules.v4
+    chmod 700 /etc/iptables/rules.v4
+}
+
+function iptables_enable_systemd(){
+    systemctl start iptables-restore
+    systemctl enable iptables-restore
+}
+
+function iptables_apply_default(){
+    iptables_reset_rules
+    iptables_add_default_rules
+    iptables_save_rules
+    iptables_enable_systemd
+}
+
+iptables_apply_default

@@ -1,0 +1,15 @@
+- name: Installing IPTable Restore Service
+  ansible.builtin.copy:
+    src: "iptables-restore.service"
+    dest: "/etc/systemd/system/iptables-restore.service"
+    owner: "root"
+    group: "root"
+    mode: '0700'
+
+- name: Install IPTables Setup Script
+  ansible.builtin.template:
+    src: "iptables-setup.sh.j2"
+    dest: "{{ root_install_dir }}/iptables-setup.sh"
+    owner: "root"
+    group: "root"
+    mode: '0500'

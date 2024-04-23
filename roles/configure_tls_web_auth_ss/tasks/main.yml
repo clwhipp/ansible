@@ -72,6 +72,7 @@
     path: "./.pki"
     state: absent
   delegate_to: localhost
+  become: false
 
 - name: Upload {{ svc_domain }}.crt
   ansible.builtin.copy:
@@ -86,3 +87,4 @@
     path: "{{ svc_domain }}.crt"
     state: absent
   delegate_to: localhost
+  become: false

@@ -1,4 +1,4 @@
-- hosts: test
+- hosts: files
   become: true
   roles:
     - common
@@ -7,6 +7,7 @@
     - configure_nextcloud
     - configure_tls_web_auth_ss
     - configure_nfs_client
+    - configure_iptables
 
   vars:
     # Nebula managed at the host level
