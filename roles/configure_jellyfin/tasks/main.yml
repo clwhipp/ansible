@@ -1,0 +1,42 @@
+- name: Ensure {{ root_install_dir }} exists
+  file:
+    path: "{{ root_install_dir }}"
+    state: directory
+    owner: "root"
+    group: "{{ user }}"
+    mode: '0750'
+
+- name: Ensure the media user exists
+  user:
+    name: "media"
+    password: "{{ lookup('bitwarden_field', 'hash', 'media_service_user_password') }}"
+    shell: "/usr/bin/bash"
+    create_home: yes
+    state: present
+
+- name: Ensure media .ssh directory exists
+  file:
+    path: "/home/media/.ssh"
+    state: directory
+    owner: "media"
+    group: "media"
+    mode: '0700'
+
+- name: Set authorized keys for media
+  authorized_key:
+    user: "media"
+    state: present
+    key: "{{ item }}"
+  with_items: "{{ ssh_authorized_keys }}"
+
+- name: Ensure data directories exist
+  file:
+    path: "{{ item.location }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    group: "{{ item.owner }}"
+    mode: "{{ item.mode }}"
+  loop: "{{ data_mounts }}"
+
+- name: Setup Repositories
+  import_tasks: repo.yml
