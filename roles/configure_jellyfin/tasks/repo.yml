@@ -1,0 +1,71 @@
+- name: Check if Github Access Completed
+  ansible.builtin.stat:
+    path: "/home/{{ user }}/.ssh/id_ed25519"
+  register: github_key_present
+
+- name: Downloading Github Access Key
+  bitwarden_download_attachment:
+    name: "GITHUB_SSH"
+    filename: "id_ed25519"
+    file_path: "./id_ed25519"
+  no_log: true
+  delegate_to: localhost
+  become: false
+  when: not github_key_present.stat.exists
+
+- name: Ensure .ssh directory exists for {{ user }}
+  ansible.builtin.file:
+    path: "/home/{{ user }}/.ssh"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0700'
+  when: not github_key_present.stat.exists
+
+- name: Install Github Access for {{ user }}
+  ansible.builtin.copy:
+    src: "./id_ed25519"
+    dest: "/home/{{ user }}/.ssh/id_ed25519"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0700'
+  when: not github_key_present.stat.exists
+
+- name: Removing {{ admin_repo_dir }}
+  file:
+    path: "{{ admin_repo_dir }}"
+    state: absent
+
+- name: Ensure {{ admin_repo_dir }} exists
+  file:
+    path: "{{ admin_repo_dir }}"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0700'
+
+- name: Cloning {{ admin_repo_url }} to {{ admin_repo_dir }}
+  ansible.builtin.git:
+    repo: "{{ admin_repo_url }}"
+    dest: "{{ admin_repo_dir }}"
+    key_file: "/home/{{ user }}/.ssh/id_ed25519"
+    version: dev-1.8.0
+    accept_hostkey: yes
+    clone: yes
+    update: yes
+  become: false
+
+- name: Delete private key on ansible host
+  file:
+    path: "./id_ed25519"
+    state: absent
+  delegate_to: localhost
+  become: false
+
+- name: Deploy {{ root_install_dir }}/envvars.sh
+  ansible.builtin.template:
+    src: "envvars.sh.j2"
+    dest: "{{ root_install_dir }}/envvars.sh"
+    owner: "root"
+    group: "root"
+    mode: '0400'

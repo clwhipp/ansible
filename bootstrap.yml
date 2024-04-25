@@ -1,0 +1,38 @@
+---
+- hosts: all
+  become: yes
+  vars_files: 
+    - ../vars/env-secrets.yml
+
+  tasks:
+    - name: Ensure the user {{ user }} exists
+      user:
+        name: "{{ user }}"
+        password: "{{ user_password }}"
+        shell: "{{ user_shell }}"
+        groups: sudo
+        create_home: yes
+        state: present
+
+    - name: Copy .bashrc from /etc/skel to {{ user }} home directory
+      ansible.builtin.copy:
+        src: "/etc/skel/.bashrc"
+        dest: "/home/{{ user }}/.bashrc"
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        mode: '0644'
+        
+    - name: Ensure .ssh directory exists
+      file:
+        path: "/home/{{ user }}/.ssh"
+        state: directory
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        mode: '0700'
+
+    - name: Set authorized keys
+      authorized_key:
+        user: "{{ user }}"
+        state: present
+        key: "{{ item }}"
+      with_items: "{{ ssh_authorized_keys }}"

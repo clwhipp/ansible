@@ -1,20 +1,3 @@
-- name: Ensure the user {{ user }} exists
-  user:
-    name: "{{ user }}"
-    password: "{{ user_password }}"
-    shell: "{{ user_shell }}"
-    groups: sudo
-    create_home: yes
-    state: present
-
-- name: Copy .bashrc from /etc/skel to {{ user }} home directory
-  ansible.builtin.copy:
-    src: "/etc/skel/.bashrc"
-    dest: "/home/{{ user }}/.bashrc"
-    owner: "{{ user }}"
-    group: "{{ user }}"
-    mode: '0644'
-
 - name: Configure Hostname to {{ hostname }}
   hostname:
     name: "{{ hostname }}"
