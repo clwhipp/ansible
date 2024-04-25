@@ -11,6 +11,7 @@
     name: "media"
     password: "{{ lookup('bitwarden_field', 'hash', 'media_service_user_password') }}"
     shell: "/usr/bin/bash"
+    uid: 1501
     create_home: yes
     state: present
 

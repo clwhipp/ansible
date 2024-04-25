@@ -39,12 +39,6 @@ nebula_inbound_rules:
     group: media
 
 
-# Service Configurations
-service_linux_accounts:
-  - name: "media"
-    uid: 1501
-    shell: "/usr/bin/bash"
-
 data_mounts:
   - location: "{{ data_dir }}"
     owner: "root"
