@@ -14,7 +14,7 @@ read -s -p "Enter current password: " become_pass
 echo
 
 # Run playbook to setup account and password
-ansible-playbook "bootstrap.yml" -l "$hostname" --extra-vars "ansible_become_pass=$become_pass"
+ansible-playbook "bootstrap.yml" -l "$hostname" --extra-vars "ansible_become_pass=$become_pass ansible_ssh_pass=$become_pass"
 unset become_pass
 
 # Run playbook to setup rest of the host
