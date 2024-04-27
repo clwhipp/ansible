@@ -55,7 +55,7 @@
   ansible.builtin.copy:
     src: "{{ nebula_install_dir }}/host.crt"
     dest: "{{ nebula_install_dir }}/host-backup.crt"
-  remote_src: true
+    remote_src: true
   when: host_cert_stat.stat.exists
 
 - name: Upload host certificate to host
