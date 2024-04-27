@@ -25,3 +25,9 @@
 
 - include_tasks: sign-keys.yml
   when: nebula_sign_enable
+
+- name: Restart nebula service
+  service:
+    name: nebula
+    state: restarted
+  when: nebula_service_restart
