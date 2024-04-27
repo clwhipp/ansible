@@ -9,6 +9,7 @@ domain: "{{ domain_v }}"
 lan_range_cidr: "{{ lan_range_cidr_v }}"
 
 # Nebula Section
+nebula_service_restart: false
 nebula_lighthouse: "vpn.{{ domain }}"
 nebula_sign_enable: false
 nebula_sign_profile: ""
