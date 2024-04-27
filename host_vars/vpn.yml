@@ -1,0 +1,16 @@
+ansible_become_pass: "{{ lookup('bitwarden_password', 'vpn_linux_user_password') }}"
+
+# Common Overrides
+hostname: "vpn"
+fqdn: "{{ hostname }}.{{ domain }}"
+user_password: "{{ lookup('bitwarden_field', 'hash', 'vpn_linux_user_password') }}"
+
+# Nebula Configurations
+nebula_sign_enable: true
+nebula_sign_profile: "{{ fqdn }}"
+nebula_install_dir: "/etc/nebula"
+nebula_inbound_rules:
+
+  - port: "{{ ssh_port }}"
+    proto: tcp
+    group: acl:admin
