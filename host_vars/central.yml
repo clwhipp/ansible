@@ -1,0 +1,52 @@
+ansible_become_pass: "{{ lookup('bitwarden_password', 'central_linux_user_password') }}"
+
+# Common Overrides
+hostname: "central"
+fqdn: "{{ hostname }}.{{ domain }}"
+user_password: "{{ lookup('bitwarden_field', 'hash', 'central_linux_user_password') }}"
+
+# Nebula Configurations
+nebula_sign_enable: true
+nebula_sign_profile: "{{ fqdn }}"
+nebula_install_dir: "/etc/nebula"
+nebula_inbound_rules:
+
+  - port: "{{ ssh_port }}"
+    proto: tcp
+    group: acl:admin
+
+  - port: "5900-5910"
+    proto: tcp
+    group: acl:admin
+
+  - port: "9090"
+    proto: tcp
+    group: acl:admin
+
+  - port: "111"
+    proto: tcp
+    group: acl:data
+
+  - port: "2049"
+    proto: tcp
+    group: acl:data
+
+  - port: "{{ ssh_port }}"
+    proto: tcp
+    group: admin
+
+  - port: "5900-5910"
+    proto: tcp
+    group: admin
+
+  - port: "9090"
+    proto: tcp
+    group: admin
+
+  - port: "111"
+    proto: tcp
+    group: data
+
+  - port: "2049"
+    proto: tcp
+    group: data

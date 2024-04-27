@@ -6,8 +6,13 @@ all:
           ansible_connection: local
     servers:
       hosts:
+        central:
+          ansible_connection: local
+        code:
         files:
           ansible_host: {{ files_ip_address }}
         media:
           ansible_host: {{ nebula_ip_address }}
+        warden:
+        
 
