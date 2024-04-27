@@ -7,7 +7,7 @@
   ansible.builtin.copy:
     src: "{{ nebula_install_dir }}/config.yaml"
     dest: "{{ nebula_install_dir }}/config-backup.yaml"
-  remote_src: true
+    remote_src: true
   when: host_config_stat.stat.exists
 
 - name: Deploy nebula service configuration file
