@@ -38,7 +38,6 @@ nebula_inbound_rules:
     proto: tcp
     group: media
 
-
 data_mounts:
   - location: "{{ data_dir }}"
     owner: "root"

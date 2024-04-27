@@ -1,3 +1,5 @@
+ansible_become_pass: "{{ lookup('bitwarden_password', 'warden_linux_user_password') }}"
+
 # Common Overrides
 hostname: "warden"
 fqdn: "{{ hostname }}.{{ domain }}"
@@ -6,7 +8,7 @@ user_password: "{{ lookup('bitwarden_field', 'hash', 'warden_linux_user_password
 # Nebula Configurations
 nebula_sign_enable: true
 nebula_sign_profile: "{{ fqdn }}"
-nebula_install_dir: "TBD"
+nebula_install_dir: "/mnt/nebula"
 nebula_inbound_rules:
 
   - port: "{{ ssh_port }}"
@@ -24,6 +26,22 @@ nebula_inbound_rules:
   - port: 3012
     proto: tcp
     group: acl:bitwarden
+
+  - port: "{{ ssh_port }}"
+    proto: tcp
+    group: admin
+
+  - port: 443
+    proto: tcp
+    group: bitwarden
+
+  - port: 8080
+    proto: tcp
+    group: bitwarden
+
+  - port: 3012
+    proto: tcp
+    group: bitwarden
 
 # Service Configurations
 service_linux_accounts:

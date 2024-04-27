@@ -46,6 +46,18 @@
 #   delegate_to: localhost
 #   become: false
 
+- name: Check if {{ nebula_install_dir }}/host.crt
+  ansible.builtin.stat:
+    path: "{{ nebula_install_dir }}/host.crt"
+  register: host_cert_stat
+
+- name: Backing up {{ nebula_install_dir }}/host.crt
+  ansible.builtin.copy:
+    src: "{{ nebula_install_dir }}/host.crt"
+    dest: "{{ nebula_install_dir }}/host-backup.crt"
+  remote_src: true
+  when: host_cert_stat.stat.exists
+
 - name: Upload host certificate to host
   ansible.builtin.copy:
     src: "./.nebula/{{ inventory_hostname }}-host.crt"
