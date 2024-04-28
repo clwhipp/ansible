@@ -1,0 +1,4 @@
+[submodule "certificates"]
+	path = certificates
+	url = git@github.com:clwhipp/certificates.git
+	branch = main

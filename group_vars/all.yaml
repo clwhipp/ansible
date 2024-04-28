@@ -7,6 +7,7 @@ ssh_authorized_keys: "{{ ssh_authorized_keys_v }}"
 permit_ssh_password_login: "yes"
 domain: "{{ domain_v }}"
 lan_range_cidr: "{{ lan_range_cidr_v }}"
+cert_env: "{{ lookup('bitwarden_field', 'env', 'NEBULA_CA') }}"
 
 # Nebula Section
 nebula_service_restart: false
