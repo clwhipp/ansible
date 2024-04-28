@@ -6,6 +6,7 @@ fqdn: "{{ hostname }}.{{ domain }}"
 user_password: "{{ lookup('bitwarden_field', 'hash', 'central_linux_user_password') }}"
 
 # Nebula Configurations
+nebula_restart_service: true
 nebula_sign_enable: true
 nebula_sign_profile: "{{ fqdn }}"
 nebula_install_dir: "/etc/nebula"
