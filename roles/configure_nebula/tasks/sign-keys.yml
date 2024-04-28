@@ -19,22 +19,15 @@
     dest: "./.nebula/{{ inventory_hostname }}-host.pub"
     flat: yes
 
-- name: Download Nebula CA files from Bitwarden
-  bitwarden_download_attachments:
-    name: "NEBULA_CA"
-    dir_path: ".nebula"
-  delegate_to: localhost
-  become: false
-
 - name: Generate devices certificate from profile
   nebula_sign:
     profile: "{{ nebula_sign_profile }}"
-    config: ".nebula/issuance-profiles.yaml"
+    config: "{{ playbook_dir }}/certificates/nebula/issuance-profiles.yaml"
     ca_key: ".nebula/ca.key"
     ca_key_pass: "{{ nebula_ca_key_password }}"
-    ca_crt: ".nebula/ca.crt"
-    public: "./.nebula/{{ inventory_hostname }}-host.pub"
-    out_crt: "./.nebula/{{ inventory_hostname }}-host.crt"
+    ca_crt:  "{{ playbook_dir }}/certificates/nebula/{{ cert_env }}/ca.crt"
+    public:  "./.nebula/{{ inventory_hostname }}-host.pub"
+    out_crt: "{{ playbook_dir }}/certificates/nebula/{{ cert_env }}/{{ inventory_hostname }}-host.crt"
   delegate_to: localhost
   become: false
   no_log: true
@@ -60,7 +53,7 @@
 
 - name: Upload host certificate to host
   ansible.builtin.copy:
-    src: "./.nebula/{{ inventory_hostname }}-host.crt"
+    src: "{{ playbook_dir }}/certificates/nebula/{{ cert_env }}/{{ inventory_hostname }}-host.crt"
     dest: "{{ nebula_install_dir }}/host.crt"
     owner: "root"
     group: "{{ nebula_user }}"

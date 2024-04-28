@@ -212,6 +212,13 @@ def sign_cert(profile, config, ca_key, ca_key_pass, ca_crt, public, out_crt):
 
     if profile not in yaml_config:
         return False, profile + " profile was not found in " + config
+
+    dir_name = os.path.dirname(out_crt)
+    if not os.path.exists(dir_name):
+        os.makedirs(dir_name)
+
+    if os.path.exists(out_crt):
+        os.remove(out_crt)
     
     device_profile = yaml_config[profile]
 
