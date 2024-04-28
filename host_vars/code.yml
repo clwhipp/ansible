@@ -36,6 +36,10 @@ nebula_inbound_rules:
     proto: tcp
     group: acl:dev
 
+  - port: "9000"
+    proto: tcp
+    group: acl:dev
+
   - port: "{{ ssh_port }}"
     proto: tcp
     group: admin
@@ -57,5 +61,9 @@ nebula_inbound_rules:
     group: dev
 
   - port: "8443"
+    proto: tcp
+    group: dev
+
+  - port: "9000"
     proto: tcp
     group: dev
