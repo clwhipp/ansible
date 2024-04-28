@@ -171,3 +171,8 @@ firewall:
     - port: {{ ssh_port | default('22') }}
       proto: tcp
       group: acl:admin
+
+    - port: {{ nebula_port }}
+      proto: tcp
+      ca_sha: {{ ca_sha }}
+
