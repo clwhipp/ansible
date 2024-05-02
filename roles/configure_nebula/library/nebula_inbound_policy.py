@@ -13,7 +13,10 @@ def yaml_update(file_path, rules):
         entry = {}
         entry['port'] = item['port']
         entry['proto'] = item['proto']
-        entry['group'] = item['group']
+        if 'group' in item:
+            entry['group'] = item['group']
+        if 'ca_sha' in item:
+            entry['ca_sha'] = item['ca_sha']
         inbound_entries.append(entry)
 
     yaml_config['firewall']['inbound'] = inbound_entries

@@ -6,6 +6,14 @@
     group: "root"
     mode: '0700'
 
+- name: Create a directory
+  ansible.builtin.file:
+    path: "{{ root_install_dir }}"
+    state: directory
+    owner: "root"
+    group: "{{ user }}"
+    mode: '0750'
+
 - name: Install IPTables Setup Script
   ansible.builtin.template:
     src: "iptables-setup.sh.j2"

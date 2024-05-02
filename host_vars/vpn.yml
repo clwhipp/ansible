@@ -20,3 +20,8 @@ nebula_inbound_rules:
   - port: "{{ ssh_port }}"
     proto: tcp
     group: acl:admin
+
+  - port: "{{ nebula_port }}"
+    proto: tcp
+    ca_sha: "{{ ca_sha }}"
+

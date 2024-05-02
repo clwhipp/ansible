@@ -1,0 +1,12 @@
+- hosts: vpn
+  become: true
+  roles:
+    - common
+    - configure_nebula
+    - configure_iptables
+
+  vars:
+    # Nebula managed at the host level
+
+  vars_files: 
+    - vars/env-secrets.yml
