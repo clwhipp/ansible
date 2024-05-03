@@ -51,7 +51,7 @@ would allow devices in an "acl:nextcloud" group to have access to port 443.
 ```
 nebula_inbound_rules:
 
-  - port: "{{ ssh_port }}"
+  - port: "{{ ssh_port_v }}"
     proto: tcp
     group: acl:admin
 

@@ -11,7 +11,7 @@ nebula_sign_enable: true
 nebula_sign_profile: "{{ fqdn }}"
 nebula_inbound_rules:
 
-  - port: "{{ ssh_port }}"
+  - port: "{{ ssh_port_v }}"
     proto: tcp
     group: acl:admin
 
@@ -23,7 +23,7 @@ nebula_inbound_rules:
     proto: tcp
     group: acl:nextcloud
 
-  - port: "{{ ssh_port }}"
+  - port: "{{ ssh_port_v }}"
     proto: tcp
     group: admin
 

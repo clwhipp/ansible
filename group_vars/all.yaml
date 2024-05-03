@@ -23,7 +23,7 @@ nebula_port: "{{ nebula_port_v }}"
 nebula_range_cidr: "{{ nebula_range_cidr_v }}"
 nebula_inbound_rules:
 
-  - port: "{{ ssh_port }}"
+  - port: "{{ ssh_port_v }}"
     proto: tcp
     group: acl:admin
 
