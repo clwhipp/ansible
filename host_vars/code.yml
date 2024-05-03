@@ -12,7 +12,7 @@ nebula_sign_profile: "{{ fqdn }}"
 nebula_install_dir: "/etc/nebula"
 nebula_inbound_rules:
 
-  - port: "{{ ssh_port }}"
+  - port: "{{ ssh_port_v }}"
     proto: tcp
     group: acl:admin
 
@@ -36,11 +36,11 @@ nebula_inbound_rules:
     proto: tcp
     group: acl:dev
 
-  - port: "9000"
+  - port: "{{ vscode_web_v }}"
     proto: tcp
     group: acl:dev
 
-  - port: "{{ ssh_port }}"
+  - port: "{{ ssh_port_v }}"
     proto: tcp
     group: admin
 
@@ -64,6 +64,6 @@ nebula_inbound_rules:
     proto: tcp
     group: dev
 
-  - port: "9000"
+  - port: "{{ vscode_web_v }}"
     proto: tcp
     group: dev

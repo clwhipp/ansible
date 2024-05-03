@@ -12,7 +12,7 @@ nebula_sign_profile: "{{ fqdn }}"
 nebula_install_dir: "/mnt/nebula"
 nebula_inbound_rules:
 
-  - port: "{{ ssh_port }}"
+  - port: "{{ ssh_port_v }}"
     proto: tcp
     group: acl:admin
 
@@ -28,7 +28,7 @@ nebula_inbound_rules:
     proto: tcp
     group: acl:bitwarden
 
-  - port: "{{ ssh_port }}"
+  - port: "{{ ssh_port_v }}"
     proto: tcp
     group: admin
 

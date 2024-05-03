@@ -12,41 +12,41 @@ nebula_sign_profile: "{{ fqdn }}"
 nebula_install_dir: "/etc/nebula"
 nebula_inbound_rules:
 
-  - port: "{{ ssh_port }}"
+  - port: "{{ ssh_port_v }}"
     proto: tcp
     group: acl:admin
 
-  - port: "5900-5910"
+  - port: "{{ ssh_port_v }}"
+    proto: tcp
+    group: admin
+
+  - port: "{{ vnc_port_range_v }}"
     proto: tcp
     group: acl:admin
 
-  - port: "9090"
+  - port: "{{ vnc_port_range_v }}"
+    proto: tcp
+    group: admin
+
+  - port: "{{ cockpit_port_v }}"
     proto: tcp
     group: acl:admin
+
+  - port: "{{ cockpit_port_v }}"
+    proto: tcp
+    group: admin
 
   - port: "111"
     proto: tcp
     group: acl:data
-
-  - port: "2049"
-    proto: tcp
-    group: acl:data
-
-  - port: "{{ ssh_port }}"
-    proto: tcp
-    group: admin
-
-  - port: "5900-5910"
-    proto: tcp
-    group: admin
-
-  - port: "9090"
-    proto: tcp
-    group: admin
 
   - port: "111"
     proto: tcp
     group: data
+
+  - port: "2049"
+    proto: tcp
+    group: acl:data
 
   - port: "2049"
     proto: tcp
