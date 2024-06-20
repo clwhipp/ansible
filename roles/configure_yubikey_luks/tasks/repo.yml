@@ -1,0 +1,23 @@
+- name: Removing /home/{{ user }}/yubikey-luks
+  file:
+    path: "/home/{{ user }}/yubikey-luks"
+    state: absent
+
+- name: Ensure /home/{{ user }} exists
+  file:
+    path: "/home/{{ user }}"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0700'
+
+- name: Cloning yubikey-luks to /home/{{ user }}/yubikey-luks
+  ansible.builtin.git:
+    repo: "git@github.com:clwhipp/yubikey-luks.git"
+    dest: "/home/{{ user }}/yubikey-luks"
+    key_file: "/home/{{ user }}/.ssh/id_ed25519"
+    version: extended-yubikey-challenge
+    accept_hostkey: yes
+    clone: yes
+    update: yes
+  become: false

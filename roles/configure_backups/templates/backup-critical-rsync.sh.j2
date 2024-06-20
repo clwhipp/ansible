@@ -1,0 +1,62 @@
+#!/usr/bin/bash
+
+CURRENTYEAR=`date +"%Y"`
+CURRENTMONTH=`date +"%m"`
+CURRENTDAY=`date +"%d"`
+CURRENTTIME=`date +"%H-%M"`
+
+BACKUP_DEST_BASE="{{ backup_dir }}"
+BACKUP_DATA_DEST="$BACKUP_DEST_BASE/data"
+BACKUP_INC_DEST="$BACKUP_DEST_BASE/incrementals/$CURRENTYEAR"
+
+RSYNC_ARCHIVE_DIR="$BACKUP_INC_DEST/$CURRENTYEAR-$CURRENTMONTH-$CURRENTDAY-$CURRENTTIME"
+
+LOG_DEST_DIR="$BACKUP_DEST_BASE/logs/$CURRENTYEAR"
+LOG_FILE_PATH="$LOG_DEST_DIR/$CURRENTYEAR-$CURRENTMONTH-$CURRENTDAY-$CURRENTTIME-rsync_log.txt"
+
+# Make sure directory exists for storing backups
+if [ ! -d "$RSYNC_ARCHIVE_DIR" ]; then
+	mkdir -p "$RSYNC_ARCHIVE_DIR"
+fi
+
+if [ ! -d "$BACKUP_DATA_DEST" ]; then
+	mkdir -p "$BACKUP_DATA_DEST"
+fi
+
+if [ ! -d "$BACKUP_INC_DEST" ]; then
+	mkdir -p "$BACKUP_INC_DEST"
+fi
+
+if [ ! -d "$LOG_DEST_DIR" ]; then
+	mkdir -p "$LOG_DEST_DIR"
+fi
+
+# Perform Backup Operation
+rsync -avzht \
+      --progress \
+      --delete \
+      --exclude=lost+found \
+      --exclude=incrementals \
+      --exclude=media \
+      --no-perms --no-owner \
+      --backup --backup-dir="$RSYNC_ARCHIVE_DIR" \
+      --log-file="$LOG_FILE_PATH" \
+      {{ data_dir }} "$BACKUP_DATA_DEST"
+
+# Generate Compressed Tar from Backups
+tar -czf "$RSYNC_ARCHIVE_DIR.tar.gz" "$RSYNC_ARCHIVE_DIR"
+rm -rf "$RSYNC_ARCHIVE_DIR"
+
+# Adjust permissions on the log directory
+chown -R root:{{ user }} $LOG_DEST_DIR
+find "$LOG_DEST_DIR" -type d -exec chmod 550 {} \;
+find "$LOG_DEST_DIR" -type f -exec chmod 440 {} \;
+
+# Adjust permissions of the data directory
+chown -R root:{{ user }} "$BACKUP_DATA_DEST"
+chmod -R 750 "$BACKUP_DATA_DEST"
+
+# Adjust permissions of the incrementals directory
+chown -R root:{{ user }} "$BACKUP_DEST_BASE/incrementals"
+find "$BACKUP_INC_DEST" -type d -exec chmod 750 {} \;
+find "$BACKUP_INC_DEST" -type f -exec chmod 440 {} \;

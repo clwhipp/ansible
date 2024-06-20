@@ -1,0 +1,34 @@
+- name: Check if {{ admin_repo_dir }} exists
+  ansible.builtin.stat:
+    path: "{{ admin_repo_dir }}"
+  register: admin_repo_stat
+
+- name: Create {{ admin_repo_dir }}
+  file:
+    path: "{{ admin_repo_dir }}"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0700'
+  when: not admin_repo_stat.stat.exists
+
+- name: Cloning {{ admin_repo_url }} to {{ admin_repo_dir }}
+  ansible.builtin.git:
+    repo: "{{ admin_repo_url }}"
+    dest: "{{ admin_repo_dir }}"
+    key_file: "/home/{{ user }}/.ssh/id_ed25519"
+    version: dev-1.8.0
+    accept_hostkey: yes
+    update: yes
+    clone: yes
+  become: false
+
+- name: Adjusting permissions of {{ admin_repo_dir }}
+  file:
+    path: "{{ admin_repo_dir }}"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    recurse: yes
+    mode: '0700'
+  when: not admin_repo_stat.stat.exists

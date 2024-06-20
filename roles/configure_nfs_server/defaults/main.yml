@@ -1,0 +1,17 @@
+nfs_server_mounts:
+
+  # Nextcloud Support
+  - path: "{{ data_dir }}/nextcloud"
+    client_ip: "{{ files_ip_address }}"
+    options: "all_squash,rw,sync,subtree_check,anonuid=1502,anongid=1502"
+  - path: "{{ data_dir }}/mariadb"
+    client_ip: "{{ files_ip_address }}"
+    options: "all_squash,rw,sync,subtree_check,anonuid=1503,anongid=1503"
+
+  # Media Support
+  - path: "{{ data_dir }}/jellyfin"
+    client_ip: "{{ media_ip_address }}"
+    options: "all_squash,rw,sync,subtree_check,anonuid=1501,anongid=1501"
+  - path: "{{ data_dir }}/media"
+    client_ip: "{{ media_ip_address }}"
+    options: "all_squash,rw,sync,subtree_check,anonuid=1501,anongid=1501"

@@ -1,0 +1,9 @@
+[Unit]
+Description=Trigger mdcheck_continue service at 10 PM daily
+
+[Timer]
+OnCalendar=*-*-* 22:00:00
+Persistent=true
+
+[Install]
+WantedBy=mdmonitor.service

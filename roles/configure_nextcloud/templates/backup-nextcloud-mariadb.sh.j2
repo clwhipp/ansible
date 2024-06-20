@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Define variables
+CONTAINER_NAME="mariadb"
+DB_USER="root"
+DB_PASSWORD="{{ nextcloud_db_root_password }}"
+DB_NAME="nextcloud"
+BACKUP_DIR="{{ data_dir }}/mariadb"
+TIMESTAMP=$(date +"%F_%T")
+BACKUP_FILE="$BACKUP_DIR/$DB_NAME-$TIMESTAMP.sql"
+LOG_FILE="/var/log/mariadb_backup.log"
+
+# Ensure the backup directory exists
+mkdir -p "$BACKUP_DIR"
+
+# Check if the container is running
+if [ ! "$(docker ps -q -f name=$CONTAINER_NAME)" ]; then
+    echo "[$TIMESTAMP] Error: Container $CONTAINER_NAME is not running." >> $LOG_FILE
+    exit 1
+fi
+
+# Perform the mysqldump
+docker exec -i $CONTAINER_NAME /usr/bin/mysqldump -u$DB_USER -p$DB_PASSWORD $DB_NAME > $BACKUP_FILE
+chown db:db $BACKUP_FILE
+chmod 500 $BACKUP_FILE
+
+# Optional: Remove old backups (older than 7 days)
+find $BACKUP_DIR -type f -name "*.sql" -mtime +7 -exec rm {} \;
+
+# Log the backup
+echo "[$TIMESTAMP] Backup of $DB_NAME completed." >> $LOG_FILE

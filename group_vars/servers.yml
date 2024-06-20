@@ -2,8 +2,10 @@
 root_install_dir: "{{ root_install_dir_v }}"
 secrets_dir: "{{ root_install_dir }}/secrets"
 tls_certs_dir: "{{ root_install_dir }}/certs"
+scripts_dir: "{{ root_install_dir }}/scripts"
 admin_repo_dir: "{{ root_install_dir }}/services"
 data_dir: "/mnt/critical"
+backup_dir: "/mnt/backup"
 data_mounts:
   - location: "{{ data_dir }}"
     owner: "root"
@@ -16,15 +18,6 @@ csr_state: "{{ csr_state_v }}"
 csr_city: "{{ csr_city_v }}"
 csr_org: "{{ csr_org_v }}"
 domain_ca_key_password: "{{ lookup('bitwarden_password', 'DOMAIN_CA') }}"
-
-# NFS Settings
-nfs_server_ip: "{{ nfs_server_ip_v }}"
-central_ip_address: "{{ central_ip_address_v }}"
-files_ip_address: "{{ files_ip_address_v }}"
-media_ip_address: "{{ media_ip_address_v }}"
-code_ip_address: "{{ code_ip_address_v }}"
-vpn_ip_address: "{{ vpn_ip_address_v }}"
-warden_ip_address: "{{ warden_ip_address_v }}"
 
 # Nebula
 nebula_ca_key_password: "{{ lookup('bitwarden_password', 'NEBULA_CA') }}"

@@ -1,6 +1,18 @@
-# DO NOT ADJUST - These must align with docker build process.
-data_dir: "/mnt/critical"
-data_mounts:
+nextcloud_db_user: "{{ nextcloud_db_user_v }}"
+nextcloud_db_user_password: "{{ lookup('bitwarden_password', 'nextcloud_db_user_password') }}"
+nextcloud_db_root_password: "{{ lookup('bitwarden_password', 'nextcloud_db_root_password') }}"
+nextcloud_admin_user: "{{ nextcloud_admin_user_v }}"
+nextcloud_admin_user_password: "{{ lookup('bitwarden_password', 'nextcloud_admin_user_password') }}"
+
+nextcloud_linux_accounts:
+  - name: "nc"
+    uid: 1502
+    shell: "/sbin/nologin"
+  - name: "db"
+    uid: 1503
+    shell: "/sbin/nologin"
+
+nextcloud_data_mounts:
   - location: "{{ data_dir }}"
     owner: "root"
     mode: '0755'
@@ -11,10 +23,6 @@ data_mounts:
     owner: "db"
     mode: '0700'
 
-service_linux_accounts:
-  - name: "nc"
-    uid: 1502
-    shell: "/sbin/nologin"
-  - name: "db"
-    uid: 1503
-    shell: "/sbin/nologin"
+csr_cn: "Nextcloud"
+svc_domain: "files.{{ domain }}"
+svc_account: "nc"

@@ -1,0 +1,7 @@
+- name: Deploy {{ root_install_dir }}/envvars.sh
+  ansible.builtin.template:
+    src: "envvars.sh.j2"
+    dest: "{{ root_install_dir }}/envvars.sh"
+    owner: "root"
+    group: "root"
+    mode: '0400'

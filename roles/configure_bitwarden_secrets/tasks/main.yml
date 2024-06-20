@@ -1,0 +1,55 @@
+
+
+- name: Update apt package index
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install bitwarden secrets manager dependencies
+  ansible.builtin.apt:
+    name:
+      - unzip
+      - jq
+    state: present
+
+- name: Ensure /home/{{ user }}/Documents exists
+  file:
+    path: "/home/{{ user }}/Documents"
+    state: directory
+
+- name: Downloading Bitwarden Secrets Manager CLI
+  get_url:
+    url: https://github.com/bitwarden/sdk/releases/download/bws-v0.5.0/bws-x86_64-unknown-linux-gnu-0.5.0.zip
+    dest: "/home/{{ user }}/Documents/bws.zip"
+    mode: '0600'
+
+- name: Unzipping Bitwarden Secrets Manager Archive
+  unarchive:
+    src: "/home/{{ user }}/Documents/bws.zip"
+    dest: /usr/bin
+    remote_src: yes
+
+- name: Adjust ownership and permissions
+  file:
+    path: "/usr/bin/bws"
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Check if bws token file present
+  ansible.builtin.stat:
+    path: "{{ secrets_dir }}/.bws-token.sh"
+  register: bws_secret_present
+
+- name: Ensure {{ secrets_dir }} exists
+  file:
+    path: "{{ secrets_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '755'
+
+- name: Downloading Biwarden Secrets Access Key
+  ansible.builtin.copy:
+    src: "bws-token.sh"
+    dest: "{{ secrets_dir }}/.bws-token.sh"
+  when: not bws_secret_present.stat.exists

@@ -1,0 +1,10 @@
+[Unit]
+Description=Initiates array check on {{ md_device }}
+
+[Timer]
+OnCalendar={{ check_frequency }}
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+Also=mdcheck_continue.timer

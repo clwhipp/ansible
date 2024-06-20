@@ -1,0 +1,12 @@
+[Unit]
+Description=MD array scrubbing - continuation
+ConditionPathExistsGlob=/var/lib/mdcheck/MD_UUID_*
+Documentation=man:mdadm(8)
+
+[Service]
+Type=oneshot
+Environment="MDADM_CHECK_DURATION=8 hours"
+ExecStart={{ scripts_dir }}/mdcheck --continue --duration ${MDADM_CHECK_DURATION}
+
+[Install]
+WantedBy=multi-user.target

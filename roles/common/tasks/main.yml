@@ -4,3 +4,6 @@
 
 - name: Setup SSH and Fail2Ban
   import_tasks: ssh.yml
+
+- name: Setting up Git
+  import_tasks: git.yml

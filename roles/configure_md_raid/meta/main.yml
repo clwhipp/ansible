@@ -1,0 +1,3 @@
+dependencies:
+  - configure_yubikey_luks
+  - configure_bitwarden_secrets

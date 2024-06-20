@@ -1,0 +1,94 @@
+#!/usr/bin/bash
+
+export CRITICAL_BASE="{{ data_dir }}"
+export BORG_REPO="{{ backup_dir }}/borg"
+export BORG_PASSPHRASE_UID="{{ borg_repo_bws_uid }}"
+export OFFLINE_BACKUP_USER="{{ user }}"
+
+source "{{ secrets_dir }}/.bws-token.sh"
+
+function validate_root(){
+  if [ "$EUID" -ne 0 ]; then
+    echo "Please run as root"
+    exit
+  fi
+}
+
+function perform_backup(){
+
+    echo "Running Backup ..."
+    export BORG_PASSPHRASE=$(bws secret get $BORG_PASSPHRASE_UID | jq -r '.value')
+    if [ -z "$BORG_PASSPHRASE" ]; then
+        exit 1
+    fi
+
+    # some helpers and error handling
+    info() { printf "\n%s %s\n\n" "$( date )" "$*" >&2; }
+    trap 'echo $( date ) Backup interrupted >&2; exit 2' INT TERM
+
+    info "Starting backup"
+
+    borg create                         \
+        --verbose                       \
+        --filter AME                    \
+        --list                          \
+        --progress                      \
+        --stats                         \
+        --show-rc                       \
+        --compression zstd,10           \
+        --exclude-caches                \
+	--exclude "${CRITICAL_BASE}/media/*" \
+                                        \
+        ::'{{ borg_archive_selector }}-{now}'            \
+        ${CRITICAL_BASE}
+
+    backup_exit=$?
+
+    info "Pruning repository"
+
+    # Prune goes through archives in the repositories and marks expired ones
+    # for deletion and removal.
+    borg prune                          \
+        --list                          \
+        --prefix '{{ borg_archive_selector }}-'          \
+        --show-rc                       \
+        --keep-daily    30              \
+        --keep-weekly   156             \
+
+    prune_exit=$?
+
+    unset BORG_PASSPHRASE
+
+    # use highest exit code as global exit code
+    global_exit=$(( backup_exit > prune_exit ? backup_exit : prune_exit ))
+
+    if [ ${global_exit} -eq 0 ]; then
+        info "Backup and Prune finished successfully"
+    elif [ ${global_exit} -eq 1 ]; then
+        info "Backup and/or Prune finished with warnings"
+    else
+        info "Backup and/or Prune finished with errors"
+    fi
+
+    chown -R root:$OFFLINE_BACKUP_USER $BORG_REPO
+    chmod -R 750 $BORG_REPO
+    
+    exit ${global_exit}
+}
+
+function push_offsite(){
+
+    echo "Pushing to iDrive E2 ..."
+    rclone sync --progress $BORG_REPO {{ idrive_e2_target }}:{{ idrive_e2_bucket }}
+    clone_exit=$?
+    if [ ${clone_exit} -eq 0 ]; then
+        echo "Push to iDrive E2 Successful"
+    else
+       echo "Push to iDrive E2 finished with errors"
+    fi
+
+}
+
+validate_root
+perform_backup
+push_offsite

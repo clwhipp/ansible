@@ -1,0 +1,16 @@
+jellyfin_linux_accounts:
+  - name: "media"
+    uid: 1501
+    shell: "/sbin/nologin"
+    password: "{{ lookup('bitwarden_field', 'hash', 'media_service_user_password') }}"
+
+jellyfin_data_mounts:
+  - location: "{{ data_dir }}"
+    owner: "root"
+    mode: '0755'
+  - location: "{{ data_dir }}/media"
+    owner: "media"
+    mode: '0700'
+  - location: "{{ data_dir }}/jellyfin"
+    owner: "media"
+    mode: '0700'

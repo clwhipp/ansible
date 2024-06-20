@@ -1,0 +1,49 @@
+#!/bin/bash
+
+source {{ secrets_dir }}/.bws-token.sh
+
+function mount_critical(){
+	# Critical RAID is a mirror array consisting of 3 physical drives.
+
+	# Mount dm-integrity partitions ensuring that HMAC-SHA256 tags are generated and verified.
+	integritysetup open /dev/sda auth_8tb_a --integrity hmac-sha256 --integrity-key-file {{ secrets_dir }}/dm-integrity-auth-key.bin --integrity-key-size 32
+	integritysetup open /dev/sdc auth_8tb_c --integrity hmac-sha256 --integrity-key-file {{ secrets_dir }}/dm-integrity-auth-key.bin --integrity-key-size 32
+	integritysetup open /dev/sde auth_8tb_e --integrity hmac-sha256 --integrity-key-file {{ secrets_dir }}/dm-integrity-auth-key.bin --integrity-key-size 32
+
+	# At this point, the RAID software scans the /dev/mapper/auth_* devices and reconstructs RAID devices. This can be verified
+	# with 'cat /proc/mdstat' in the terminal.
+
+	# RAID multi-devices are encrypted with LUKS to ensure confidentiality of the data. Need to transmit the challenge to the yubikey
+	# so that the appropriate decryption password can be generated.
+	echo "Unlocking Critical Array ..."
+	export YUBIKEY_CHALLENGE=$(bws secret get {{ critical_bws_uid }} | jq -r '.value')
+	yubikey-luks-open -d {{ critical_raid_name }} -n critical_secret
+	unset YUBIKEY_CHALLENGE
+
+	# Finally, the file-system needs to be mounted into the hierarchy
+	mount /dev/mapper/critical_secret {{ data_dir }}
+}
+
+function mount_backup(){
+	# Backup RAID is a mirror array consisting of 2 physical drives.
+
+	# Mount dm-integrity partitions ensuring that HMAC-SHA256 tags are generated and verified.
+	integritysetup open /dev/sdb1 auth_4tb_b --integrity hmac-sha256 --integrity-key-file {{ secrets_dir }}/dm-integrity-auth-key.bin --integrity-key-size 32
+	integritysetup open /dev/sdd1 auth_4tb_d --integrity hmac-sha256 --integrity-key-file {{ secrets_dir }}/dm-integrity-auth-key.bin --integrity-key-size 32
+
+	# At this point, the RAID software scans the /dev/mapper/auth_* devices and reconstructs RAID devices. This can be verified
+	# with 'cat /proc/mdstat' in the terminal.
+
+	# RAID multi-devices are encrypted with LUKS to ensure confidentiality of the data. Need to transmit the challenge to the yubikey
+	# so that the appropriate decryption password can be generated.
+	echo "Unlocking Backup Array ..."
+	export YUBIKEY_CHALLENGE=$(bws secret get {{ backup_bws_uid }} | jq -r '.value')
+	yubikey-luks-open -d {{ backup_raid_name }} -n backup_secret
+	unset YUBIKEY_CHALLENGE
+
+	# Finally, the file-system needs to be mounted into the hierarchy
+	mount /dev/mapper/backup_secret {{ backup_dir }}
+}
+
+mount_critical
+mount_backup

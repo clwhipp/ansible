@@ -1,0 +1,13 @@
+mdcheck_map:
+  - md_device: "md126"
+    check_frequency: "01,04,07,10-01 22:30:00"
+  - md_device: "md127"
+    check_frequency: "02,05,08,11-01 22:30:00"
+
+dm_integrity_key: "{{ lookup('bitwarden_field', 'DM Integrity', 'LUKS - Critical RAID') }}"
+
+critical_bws_uid: "0d47d840-a817-4c9d-9687-b132002674b3"
+backup_bws_uid: "951f3963-9804-4055-ab9b-b1320026ced7"
+
+critical_raid_name: "/dev/md/stark:critical"
+backup_raid_name: "/dev/md/stark:backup"

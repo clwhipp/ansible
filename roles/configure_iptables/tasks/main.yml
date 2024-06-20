@@ -6,9 +6,9 @@
     group: "root"
     mode: '0700'
 
-- name: Create a directory
+- name: Ensure scripts directory exists
   ansible.builtin.file:
-    path: "{{ root_install_dir }}"
+    path: "{{ scripts_dir }}"
     state: directory
     owner: "root"
     group: "{{ user }}"
@@ -17,7 +17,7 @@
 - name: Install IPTables Setup Script
   ansible.builtin.template:
     src: "iptables-setup.sh.j2"
-    dest: "{{ root_install_dir }}/iptables-setup.sh"
+    dest: "{{ scripts_dir }}/iptables-setup.sh"
     owner: "root"
     group: "root"
     mode: '0500'

@@ -1,3 +1,13 @@
+- name: Update apt package index
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install git package
+  ansible.builtin.apt:
+    name:
+      - git
+    state: present
+
 - name: Check if Github Access Completed
   ansible.builtin.stat:
     path: "/home/{{ user }}/.ssh/id_ed25519"
@@ -31,41 +41,9 @@
     mode: '0700'
   when: not github_key_present.stat.exists
 
-- name: Removing {{ admin_repo_dir }}
-  file:
-    path: "{{ admin_repo_dir }}"
-    state: absent
-
-- name: Ensure {{ admin_repo_dir }} exists
-  file:
-    path: "{{ admin_repo_dir }}"
-    state: directory
-    owner: "{{ user }}"
-    group: "{{ user }}"
-    mode: '0700'
-
-- name: Cloning {{ admin_repo_url }} to {{ admin_repo_dir }}
-  ansible.builtin.git:
-    repo: "{{ admin_repo_url }}"
-    dest: "{{ admin_repo_dir }}"
-    key_file: "/home/{{ user }}/.ssh/id_ed25519"
-    version: dev-1.8.0
-    accept_hostkey: yes
-    clone: yes
-    update: yes
-  become: false
-
 - name: Delete private key on ansible host
   file:
     path: "./id_ed25519"
     state: absent
   delegate_to: localhost
   become: false
-
-- name: Deploy {{ root_install_dir }}/envvars.sh
-  ansible.builtin.template:
-    src: "envvars.sh.j2"
-    dest: "{{ root_install_dir }}/envvars.sh"
-    owner: "root"
-    group: "root"
-    mode: '0400'

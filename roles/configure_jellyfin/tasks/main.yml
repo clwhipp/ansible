@@ -6,14 +6,24 @@
     group: "{{ user }}"
     mode: '0750'
 
-- name: Ensure the media user exists
-  user:
-    name: "media"
-    password: "{{ lookup('bitwarden_field', 'hash', 'media_service_user_password') }}"
-    shell: "/usr/bin/bash"
-    uid: 1501
-    create_home: yes
+- name: Ensure jellyfin linux accounts exist
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    uid: "{{ item.uid }}"
+    shell: "{{ item.shell | default(omit) }}"
+    password: "{{ item.password }}"
+    create_home: false
     state: present
+  loop: "{{ jellyfin_linux_accounts }}"
+
+- name: Ensure Jellyfin data directories exist
+  file:
+    path: "{{ item.location }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    group: "{{ item.owner }}"
+    mode: "{{ item.mode }}"
+  loop: "{{ jellyfin_data_mounts }}"
 
 - name: Ensure media .ssh directory exists
   file:
@@ -30,14 +40,10 @@
     key: "{{ item }}"
   with_items: "{{ ssh_authorized_keys }}"
 
-- name: Ensure data directories exist
-  file:
-    path: "{{ item.location }}"
-    state: directory
-    owner: "{{ item.owner }}"
-    group: "{{ item.owner }}"
-    mode: "{{ item.mode }}"
-  loop: "{{ data_mounts }}"
-
-- name: Setup Repositories
-  import_tasks: repo.yml
+- name: Deploy {{ root_install_dir }}/envvars.sh
+  ansible.builtin.template:
+    src: "envvars.sh.j2"
+    dest: "{{ root_install_dir }}/envvars.sh"
+    owner: "root"
+    group: "root"
+    mode: '0400'

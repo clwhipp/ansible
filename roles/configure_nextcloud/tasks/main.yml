@@ -14,7 +14,7 @@
     shell: "{{ item.shell | default(omit) }}"
     create_home: false
     state: present
-  loop: "{{ service_linux_accounts }}"
+  loop: "{{ nextcloud_linux_accounts }}"
 
 # Create data directories for services
 - name: Ensure data directories exist
@@ -24,10 +24,41 @@
     owner: "{{ item.owner }}"
     group: "{{ item.owner }}"
     mode: "{{ item.mode }}"
-  loop: "{{ data_mounts }}"
+  loop: "{{ nextcloud_data_mounts }}"
 
 - name: Setup Service Secrets
   import_tasks: secrets.yml
 
-- name: Setup Repositories
-  import_tasks: repo.yml
+- name: Deploy {{ root_install_dir }}/envvars.sh
+  ansible.builtin.template:
+    src: "envvars.sh.j2"
+    dest: "{{ root_install_dir }}/envvars.sh"
+    owner: "root"
+    group: "root"
+    mode: '0400'
+
+- name: Ensure {{ scripts_dir }} exists
+  file:
+    path: "{{ scripts_dir }}"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: "755"
+
+- name: Update apt package index
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install MySQL Client for Backups
+  ansible.builtin.apt:
+    name:
+      - mysql-client
+    state: present
+
+- name: Deploy backup-nextcloud-mariadb.sh script
+  ansible.builtin.template:
+    src: "backup-nextcloud-mariadb.sh.j2"
+    dest: "{{ scripts_dir }}/backup-nextcloud-mariadb.sh"
+    owner: root
+    group: "root"
+    mode: '0500'

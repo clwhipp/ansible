@@ -1,0 +1,12 @@
+[Unit]
+Description=Triggers array check operation on {{ md_device }}
+Wants=mdcheck_continue.timer
+Documentation=man:mdadm(8)
+
+[Service]
+Type=oneshot
+Environment="MDADM_CHECK_DURATION=8 hours"
+ExecStart={{ scripts_dir }}/mdcheck --duration ${MDADM_CHECK_DURATION} --device /dev/{{ md_device }}
+
+[Install]
+WantedBy=multi-user.target

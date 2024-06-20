@@ -1,0 +1,59 @@
+ansible_become_pass: "{{ lookup('bitwarden_password', 'nexus_linux_user_password') }}"
+user_password: "{{ lookup('bitwarden_field', 'hash', 'nexus_linux_user_password') }}"
+
+# Common Overrides
+hostname: "nexus"
+fqdn: "{{ hostname }}.{{ domain }}"
+
+# Nebula Configurations (Inactive)
+nebula_restart_service: false
+nebula_sign_enable: false
+nebula_sign_profile: "{{ fqdn }}"
+nebula_install_dir: "/etc/nebula"
+nebula_inbound_rules:
+
+  # Administrative Access
+
+  - port: "{{ ssh_port_v }}"
+    proto: tcp
+    group: acl:admin
+
+  - port: "{{ ssh_port_v }}"
+    proto: tcp
+    group: admin
+
+  # Jellyfin Access
+
+  - port: 80
+    proto: tcp
+    group: acl:media
+
+  - port: 8096
+    proto: tcp
+    group: acl:media    
+
+  - port: 80
+    proto: tcp
+    group: media
+
+  - port: 8096
+    proto: tcp
+    group: media
+
+  # Nextcloud Access
+
+  - port: 443
+    proto: tcp
+    group: acl:nextcloud
+
+  - port: 8443
+    proto: tcp
+    group: acl:nextcloud
+
+  - port: 443
+    proto: tcp
+    group: nextcloud
+
+  - port: 8443
+    proto: tcp
+    group: nextcloud

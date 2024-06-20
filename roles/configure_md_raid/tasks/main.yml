@@ -1,0 +1,83 @@
+- name: Ensure {{ install_dir }}/scripts exists
+  file:
+    path: "{{ install_dir }}/scripts"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: "755"
+
+- name: Install modified mdcheck script
+  ansible.builtin.copy:
+    src: "mdcheck"
+    dest: "{{ install_dir }}/scripts/mdcheck"
+    owner: "root"
+    group: "root"
+    mode: '0700'
+
+# Handles installation of service(s) for triggering the check
+# operation within an mdadm managed raid.
+
+- name: Generate mdcheck start service files
+  ansible.builtin.template:
+    src: "mdcheck_template_start.service.j2"
+    dest: "/lib/systemd/system/mdcheck_{{ item.md_device }}_start.service"
+    owner: "root"
+    group: "root"
+    mode: "700"
+  loop: "{{ mdcheck_map }}"
+
+- name: Generate timers for mdcheck start operations
+  ansible.builtin.template:
+    src: "mdcheck_template_timer.timer.j2"
+    dest: "/lib/systemd/system/mdcheck_{{ item.md_device }}_start.timer"
+    owner: "root"
+    group: "root"
+    mode: "700"
+  loop: "{{ mdcheck_map }}"
+
+# Install service and timer for enabling continuation of raid scrubbing
+# sessions on a nightly basis.
+
+- name: Install mdcheck continue service
+  ansible.builtin.template:
+    src: "mdcheck_continue.service.j2"
+    dest: "/lib/systemd/system/mdcheck_continue.service"
+    owner: "root"
+    group: "root"
+    mode: '0700'
+
+- name: Install mdcheck continue timer
+  ansible.builtin.copy:
+    src: "mdcheck_continue.timer"
+    dest: "/lib/systemd/system/mdcheck_continue.timer"
+    owner: "root"
+    group: "root"
+    mode: '0700'
+
+- name: Ensure {{ secrets_dir }} exists
+  file:
+    path: "{{ secrets_dir }}"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: "755"
+
+- name: Installing dm-integrity authentication key to {{ secrets_dir }}/dm-integrity-auth-key.bin
+  shell: echo "{{ dm_integrity_key }}" | xxd -r - "{{ secrets_dir }}/dm-integrity-auth-key.bin"
+  no_log: true
+
+- name: Ensure permissions on {{ secrets_dir }}/dm-integrity-auth-key.bin
+  file:
+    path: "{{ secrets_dir }}/dm-integrity-auth-key.bin"
+    state: file
+    owner: "root"
+    group: "root"
+    mode: '0400'
+
+- name: Deploy yubikey-luks unlock script for raids
+  ansible.builtin.template:
+    src: "unlock-with-yubikey.sh.j2"
+    dest: "{{ scripts_dir }}/unlock-with-yubikey.sh"
+    owner: root
+    group: "root"
+    mode: '0500'
