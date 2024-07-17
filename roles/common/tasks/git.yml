@@ -8,21 +8,6 @@
       - git
     state: present
 
-- name: Check if Github Access Completed
-  ansible.builtin.stat:
-    path: "/home/{{ user }}/.ssh/id_ed25519"
-  register: github_key_present
-
-- name: Downloading Github Access Key
-  bitwarden_download_attachment:
-    name: "GITHUB_SSH"
-    filename: "id_ed25519"
-    file_path: "./id_ed25519"
-  no_log: true
-  delegate_to: localhost
-  become: false
-  when: not github_key_present.stat.exists
-
 - name: Ensure .ssh directory exists for {{ user }}
   ansible.builtin.file:
     path: "/home/{{ user }}/.ssh"
@@ -30,20 +15,11 @@
     owner: "{{ user }}"
     group: "{{ user }}"
     mode: '0700'
-  when: not github_key_present.stat.exists
 
-- name: Install Github Access for {{ user }}
-  ansible.builtin.copy:
-    src: "./id_ed25519"
+- name: Installing Github SSH Key
+  copy:
+    src: "github_private_key.vault"
     dest: "/home/{{ user }}/.ssh/id_ed25519"
     owner: "{{ user }}"
     group: "{{ user }}"
     mode: '0700'
-  when: not github_key_present.stat.exists
-
-- name: Delete private key on ansible host
-  file:
-    path: "./id_ed25519"
-    state: absent
-  delegate_to: localhost
-  become: false
