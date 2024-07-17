@@ -51,7 +51,7 @@ def main():
 
     result, message = download_attachments(name, dir_path)
     if not result:
-        module.fail_json(msg="Error downloading attachments: {}".format(message + str(os.getuid())))
+        module.fail_json(msg="Error downloading attachments: {}".format(message))
     else:
         module.exit_json(changed=True)
 
