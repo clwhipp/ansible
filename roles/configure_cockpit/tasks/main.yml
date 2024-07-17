@@ -1,0 +1,32 @@
+- name: Update apt package index
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install packages for cockpit
+  ansible.builtin.apt:
+    name:
+      - cockpit
+      - cockpit-machines
+      - bridge-utils
+      - cpu-checker
+      - libvirt-clients
+      - libvirt-daemon
+      - qemu-kvm
+    state: present
+
+- name: Enable and start cockpit.socket
+  systemd:
+    name: cockpit.socket
+    state: started
+    enabled: yes
+
+- name: Ensure the group 'kvm' exists
+  ansible.builtin.group:
+    name: kvm
+    state: present
+
+- name: Add user to the 'kvm' group
+  ansible.builtin.user:
+    name: "{{ user }}"
+    groups: kvm
+    append: yes

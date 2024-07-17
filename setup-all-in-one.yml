@@ -1,6 +1,7 @@
 - hosts: nexus
   become: true
   roles:
+    - configure_cockpit
     - configure_all_services
     - configure_md_raid
     - configure_backups
