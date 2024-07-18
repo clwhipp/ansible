@@ -1,14 +1,3 @@
-- name: Remove older versions of Docker
-  ansible.builtin.apt:
-    name: "{{ item }}"
-    state: absent
-  loop:
-    - docker
-    - docker-engine
-    - docker.io
-    - containerd
-    - runc
-
 # Update the apt package index
 - name: Update apt package index
   ansible.builtin.apt:
