@@ -1,0 +1,39 @@
+- name: Ensure {{ secrets_dir }} exists
+  file:
+    path: "{{ secrets_dir }}"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: "700"
+
+- name: Deploy cloudflare.ini for let's encrypt
+  ansible.builtin.template:
+    src: "cloudflare.ini.j2"
+    dest: "{{ secrets_dir }}/cloudflare.ini"
+    owner: root
+    group: "root"
+    mode: '0500'
+
+- name: Install packages for certbot and cloudflare integration
+  ansible.builtin.apt:
+    name:
+      - python3-certbot-dns-cloudflare
+      - python3-pip
+    state: present
+
+- name: Ensure {{ scripts_dir }} exists
+  file:
+    path: "{{ scripts_dir }}"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: "700"
+
+- name: Deploy let's encrypt scripts for domains
+  ansible.builtin.template:
+    src: "issue-certificate.sh.j2"
+    dest: "{{ scripts_dir }}/issue-{{ item.domain }}.sh"
+    owner: root
+    group: "root"
+    mode: '0500'
+  loop: "{{ certificates }}"

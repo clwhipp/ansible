@@ -1,0 +1,1 @@
+cloudflare_api_token: "{{ lookup('bitwarden_password', 'CloudFlare DNS API Token') }}"

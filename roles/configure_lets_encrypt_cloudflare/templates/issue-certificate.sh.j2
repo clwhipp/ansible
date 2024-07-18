@@ -1,0 +1,4 @@
+#!/bin/bash
+sudo certbot certonly --key-type rsa --dns-cloudflare --dns-cloudflare-credentials {{ secrets_dir }}/cloudflare.ini -d "{{ item.domain }}"
+sudo chown root:{{ item.account }} {{ lets_encrypt_dir }}/{{ item.domain }}/*
+sudo chmod 640 {{ lets_encrypt_dir }}/{{ item.domain }}/* 

@@ -1,6 +1,6 @@
-- name: Ensure {{ install_dir }}/scripts exists
+- name: Ensure {{ root_install_dir }}/scripts exists
   file:
-    path: "{{ install_dir }}/scripts"
+    path: "{{ root_install_dir }}/scripts"
     state: directory
     owner: "root"
     group: "root"
@@ -9,7 +9,7 @@
 - name: Install modified mdcheck script
   ansible.builtin.copy:
     src: "mdcheck"
-    dest: "{{ install_dir }}/scripts/mdcheck"
+    dest: "{{ root_install_dir }}/scripts/mdcheck"
     owner: "root"
     group: "root"
     mode: '0700'
@@ -20,7 +20,7 @@
 - name: Generate mdcheck start service files
   ansible.builtin.template:
     src: "mdcheck_template_start.service.j2"
-    dest: "/lib/systemd/system/mdcheck_{{ item.md_device }}_start.service"
+    dest: "/lib/systemd/system/mdcheck_{{ item.device }}_start.service"
     owner: "root"
     group: "root"
     mode: "700"
@@ -29,7 +29,7 @@
 - name: Generate timers for mdcheck start operations
   ansible.builtin.template:
     src: "mdcheck_template_timer.timer.j2"
-    dest: "/lib/systemd/system/mdcheck_{{ item.md_device }}_start.timer"
+    dest: "/lib/systemd/system/mdcheck_{{ item.device }}_start.timer"
     owner: "root"
     group: "root"
     mode: "700"
@@ -63,7 +63,7 @@
     mode: "755"
 
 - name: Installing dm-integrity authentication key to {{ secrets_dir }}/dm-integrity-auth-key.bin
-  shell: echo "{{ dm_integrity_key }}" | xxd -r - "{{ secrets_dir }}/dm-integrity-auth-key.bin"
+  shell: echo "{{ dm_integrity_key }}" | xxd -r -p - > "{{ secrets_dir }}/dm-integrity-auth-key.bin"
   no_log: true
 
 - name: Ensure permissions on {{ secrets_dir }}/dm-integrity-auth-key.bin

@@ -1,8 +1,8 @@
 mdcheck_map:
-  - md_device: "md126"
-    check_frequency: "01,04,07,10-01 22:30:00"
-  - md_device: "md127"
-    check_frequency: "02,05,08,11-01 22:30:00"
+  - device: "md126"
+    frequency: "01,04,07,10-01 22:30:00"
+  - device: "md127"
+    frequency: "02,05,08,11-01 22:30:00"
 
 dm_integrity_key: "{{ lookup('bitwarden_field', 'DM Integrity', 'LUKS - Critical RAID') }}"
 

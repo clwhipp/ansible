@@ -1,0 +1,18 @@
+vaultwarden_admin_token: "{{ lookup('bitwarden_password', 'EC2 Warden - Admin Token') }}"
+
+vaultwarden_linux_accounts:
+  - name: "bw"
+    uid: 1504
+    shell: "/sbin/nologin"
+
+vaultwarden_data_mounts:
+  - location: "{{ data_dir }}"
+    owner: "root"
+    mode: '0755'
+  - location: "{{ data_dir }}/bitwarden"
+    owner: "bw"
+    mode: '0700'
+
+csr_cn: "Bitwarden"
+svc_domain: "warden.{{ domain }}"
+svc_account: "bw"

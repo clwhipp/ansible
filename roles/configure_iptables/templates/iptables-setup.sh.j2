@@ -38,10 +38,10 @@ function iptables_add_default_rules(){
     fi
 
     # allow hosts to find the nebula endpoint
-    iptables -A INPUT -s {{ lan_range_cidr }} -p udp --dport {{ nebula_port }} -j ACCEPT
+    # iptables -A INPUT -s {{ lan_range_cidr }} -p udp --dport {{ nebula_port }} -j ACCEPT
 
     # allow nebula protected traffic to be received
-    iptables -A INPUT -s {{ nebula_range_cidr }} -j ACCEPT
+    # iptables -A INPUT -s {{ nebula_range_cidr }} -j ACCEPT
 
     # enable dns resolution with local resolver
     iptables -A INPUT -s 127.0.0.0/24 -p udp --sport 53 -j ACCEPT

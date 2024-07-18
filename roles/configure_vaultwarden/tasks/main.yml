@@ -1,0 +1,44 @@
+- name: Ensure {{ root_install_dir }} exists
+  file:
+    path: "{{ root_install_dir }}"
+    state: directory
+    owner: "root"
+    group: "{{ user }}"
+    mode: '0750'
+
+- name: Ensure Vaultwarden accounts exist
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    uid: "{{ item.uid }}"
+    shell: "{{ item.shell | default(omit) }}"
+    create_home: false
+    state: present
+  loop: "{{ vaultwarden_linux_accounts }}"
+
+- name: Ensure data directories exist for vaultwarden
+  file:
+    path: "{{ item.location }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    group: "{{ item.owner }}"
+    mode: "{{ item.mode }}"
+  loop: "{{ vaultwarden_data_mounts }}"
+
+- name: Setup Service Secrets
+  import_tasks: secrets.yml
+
+- name: Ensure vars directory exists
+  file:
+    path: "{{ root_install_dir }}/vars"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: "700"
+
+- name: Deploy {{ root_install_dir }}/vars/vaultwarden-envvars.sh
+  ansible.builtin.template:
+    src: "envvars.sh.j2"
+    dest: "{{ root_install_dir }}/vars/vaultwarden-envvars.sh"
+    owner: "root"
+    group: "root"
+    mode: '0400'

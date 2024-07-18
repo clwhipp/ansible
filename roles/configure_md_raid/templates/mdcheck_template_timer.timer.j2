@@ -1,8 +1,8 @@
 [Unit]
-Description=Initiates array check on {{ md_device }}
+Description=Initiates array check on {{ item.device }}
 
 [Timer]
-OnCalendar={{ check_frequency }}
+OnCalendar={{ item.frequency }}
 Persistent=true
 
 [Install]

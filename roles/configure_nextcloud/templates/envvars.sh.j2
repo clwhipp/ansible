@@ -20,8 +20,8 @@ export DATA_DIR="{{ data_dir }}"
 # service. This domain will be configured within Apache. The TLS certificate
 # will also need to be issued for this domain for HTTPS to be functional.
 export NEXTCLOUD_DOMAIN="{{ svc_domain }}"
-export NEXTCLOUD_TLS_CERT_LOCATION="{{ tls_certs_dir }}/{{ svc_domain }}-tls.crt"
-export NEXTCLOUD_TLS_KEY_LOCATION="{{ tls_certs_dir }}/{{ svc_domain }}-tls.key"
+export NEXTCLOUD_TLS_CERT_LOCATION="{{ lets_encrypt_dir }}/{{ svc_domain }}/fullchain1.pem"
+export NEXTCLOUD_TLS_KEY_LOCATION="{{ lets_encrypt_dir }}/{{ svc_domain }}/privkey1.pem"
 
 # Defines whether system is configured for development usage
 export DEV_MODE_ENABLED=false
