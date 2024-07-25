@@ -41,7 +41,7 @@ rsync -avzht \
       --no-perms --no-owner \
       --backup --backup-dir="$RSYNC_ARCHIVE_DIR" \
       --log-file="$LOG_FILE_PATH" \
-      {{ data_dir }} "$BACKUP_DATA_DEST"
+      {{ data_dir }}/* "$BACKUP_DATA_DEST"
 
 # Generate Compressed Tar from Backups
 tar -czf "$RSYNC_ARCHIVE_DIR.tar.gz" "$RSYNC_ARCHIVE_DIR"
