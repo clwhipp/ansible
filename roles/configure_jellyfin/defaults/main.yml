@@ -14,3 +14,6 @@ jellyfin_data_mounts:
   - location: "{{ data_dir }}/jellyfin"
     owner: "media"
     mode: '0700'
+  - location: "/mnt/transcodes"
+    owner: "media"
+    mode: '0700'
