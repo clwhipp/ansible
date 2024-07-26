@@ -2,30 +2,28 @@
 user: "{{ user_v }}"
 user_uid: "{{ user_uid_v }}"
 user_shell: "/bin/bash"
-user_password: "{{ lookup('bitwarden_field', 'hash', 'linux_user_password') }}"
 ssh_authorized_keys: "{{ ssh_authorized_keys_v }}"
 permit_ssh_password_login: "yes"
 domain: "{{ domain_v }}"
 lan_range_cidr: "{{ lan_range_cidr_v }}"
-cert_env: "{{ lookup('bitwarden_field', 'env', 'NEBULA_CA') }}"
 lets_encrypt_dir: "/etc/letsencrypt/archive"
 
 # Nebula Section
-nebula_service_restart: false
-nebula_lighthouse: "vpn.{{ domain }}"
-nebula_sign_enable: false
-nebula_sign_profile: ""
-nebula_is_lighthouse: false
-nebula_user: "nebula"
-nebula_install_dir: "/etc/nebula"
-nebula_tunnel_name: nebula1
-nebula_log_level: info
-nebula_port: "{{ nebula_port_v }}"
-nebula_range_cidr: "{{ nebula_range_cidr_v }}"
-nebula_inbound_rules:
-
-  - port: "{{ ssh_port_v }}"
-    proto: tcp
-    group: acl:admin
+# nebula_service_restart: false
+# nebula_lighthouse: "vpn.{{ domain }}"
+# nebula_sign_enable: false
+# nebula_sign_profile: ""
+# nebula_is_lighthouse: false
+# nebula_user: "nebula"
+# nebula_install_dir: "/etc/nebula"
+# nebula_tunnel_name: nebula1
+# nebula_log_level: info
+# nebula_port: "{{ nebula_port_v }}"
+# nebula_range_cidr: "{{ nebula_range_cidr_v }}"
+# nebula_inbound_rules:
+# 
+#   - port: "{{ ssh_port_v }}"
+#     proto: tcp
+#     group: acl:admin
 
 # IPTables Section

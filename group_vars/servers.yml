@@ -13,11 +13,11 @@ data_mounts:
 admin_repo_url: "{{ admin_repo_url_v }}"
 
 # Configuring Certificate Signing Request
-csr_country: "{{ csr_country_v }}"
-csr_state: "{{ csr_state_v }}"
-csr_city: "{{ csr_city_v }}"
-csr_org: "{{ csr_org_v }}"
-domain_ca_key_password: "{{ lookup('bitwarden_password', 'DOMAIN_CA') }}"
+# csr_country: "{{ csr_country_v }}"
+# csr_state: "{{ csr_state_v }}"
+# csr_city: "{{ csr_city_v }}"
+# csr_org: "{{ csr_org_v }}"
+# domain_ca_key_password: "{{ lookup('bitwarden_password', 'DOMAIN_CA') }}"
 
 # Nebula
-nebula_ca_key_password: "{{ lookup('bitwarden_password', 'NEBULA_CA') }}"
+# nebula_ca_key_password: "{{ lookup('bitwarden_password', 'NEBULA_CA') }}"
