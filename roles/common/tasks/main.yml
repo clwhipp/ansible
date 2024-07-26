@@ -2,6 +2,10 @@
   hostname:
     name: "{{ hostname }}"
 
+- name: Configure timezone to America/Chicago
+  timezone:
+    name: "America/Chicago"
+
 - name: Setup SSH and Fail2Ban
   import_tasks: ssh.yml
 
