@@ -1,7 +1,0 @@
-- hosts: servers
-  become: true
-  roles:
-    - configure_nebula
-
-  vars_files: 
-    - vars/env-secrets.yml
