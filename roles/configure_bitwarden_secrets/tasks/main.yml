@@ -52,4 +52,7 @@
   ansible.builtin.copy:
     src: "bws-token.sh"
     dest: "{{ secrets_dir }}/.bws-token.sh"
+    owner: root
+    group: root
+    mode: '700'
   when: not bws_secret_present.stat.exists
