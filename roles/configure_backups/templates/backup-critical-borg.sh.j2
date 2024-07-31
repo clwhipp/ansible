@@ -72,8 +72,6 @@ function perform_backup(){
 
     chown -R root:$OFFLINE_BACKUP_USER $BORG_REPO
     chmod -R 750 $BORG_REPO
-    
-    exit ${global_exit}
 }
 
 function push_offsite(){
