@@ -1,4 +1,0 @@
-dependencies:
-  - configure_jellyfin
-  - configure_nextcloud
-  - configure_vaultwarden
