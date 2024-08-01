@@ -2,7 +2,9 @@
   become: true
   roles:
     - configure_cockpit
-    - configure_all_services
+    - configure_jellyfin
+    - configure_nextcloud
+    - configure_vaultwarden
     - configure_lets_encrypt_cloudflare
     - configure_md_raid
     - configure_backups
