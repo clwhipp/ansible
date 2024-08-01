@@ -1,0 +1,17 @@
+# Common
+DATA_DIR={{ data_dir }}
+
+# Nextcloud
+NEXTCLOUD_DOMAIN={{ svc_domain }}
+NEXTCLOUD_TRUSTED_DOMAINS={{ svc_domain }}
+NEXTCLOUD_ADMIN_USER={{ nextcloud_admin_user }}
+NEXTCLOUD_ADMIN_PASSWORD={{ nextcloud_admin_user_password }}
+
+NEXTCLOUD_TLS_CERT_LOCATION="{{ lets_encrypt_dir }}/{{ svc_domain }}/fullchain1.pem"
+NEXTCLOUD_TLS_KEY_LOCATION="{{ lets_encrypt_dir }}/{{ svc_domain }}/privkey1.pem"
+
+# MariaDB
+MYSQL_HOST=localhost:3306
+MYSQL_USER={{ nextcloud_db_user }}
+MYSQL_PASSWORD={{ nextcloud_db_user_password }}
+MYSQL_ROOT_PASSWORD={{ nextcloud_db_root_password }}

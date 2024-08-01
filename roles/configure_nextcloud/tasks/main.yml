@@ -6,7 +6,6 @@
     group: "{{ user }}"
     mode: '0750'
 
-# Create Nextcloud and MariaDB system accounts
 - name: Ensure service accounts exist
   ansible.builtin.user:
     name: "{{ item.name }}"
@@ -16,7 +15,6 @@
     state: present
   loop: "{{ nextcloud_linux_accounts }}"
 
-# Create data directories for services
 - name: Ensure data directories exist
   file:
     path: "{{ item.location }}"
@@ -26,23 +24,12 @@
     mode: "{{ item.mode }}"
   loop: "{{ nextcloud_data_mounts }}"
 
-- name: Setup Service Secrets
-  import_tasks: secrets.yml
-
-- name: Ensure vars directory exists
-  file:
-    path: "{{ root_install_dir }}/vars"
-    state: directory
-    owner: "root"
-    group: "root"
-    mode: "700"
-
-- name: Deploy {{ root_install_dir }}/vars/nextcloud-envvars.sh
+- name: Deploy Nextcloud .env file into environment
   ansible.builtin.template:
-    src: "envvars.sh.j2"
-    dest: "{{ root_install_dir }}/vars/nextcloud-envvars.sh"
-    owner: "root"
-    group: "root"
+    src: "docker-env-template.j2"
+    dest: "{{ docker_services_dir }}/nc/.env"
+    owner: "{{ user }}"
+    group: "{{ user }}"
     mode: '0400'
 
 - name: Ensure {{ scripts_dir }} exists

@@ -1,3 +1,15 @@
+# Common
+DATA_DIR={{ data_dir }}
+
+# Bitwarden
+BITWARDEN_DOMAIN={{ svc_domain }}
+BITWARDEN_TLS_KEY_LOCATION="{{ lets_encrypt_dir }}/{{ svc_domain }}/fullchain1.pem"
+BITWARDEN_TLS_CERT_LOCATION="{{ lets_encrypt_dir }}/{{ svc_domain }}/privkey1.pem"
+
+## Adjustable for testing/development
+LOGIN_RATELIMIT_SECONDS=60
+LOGIN_RATELIMIT_MAX_BURST=10
+
 ## Token for the admin interface, preferably an Argon2 PCH string
 ## Vaultwarden has a built-in generator by calling `vaultwarden hash`
 ## For details see: https://github.com/dani-garcia/vaultwarden/wiki/Enabling-admin-page#secure-the-admin_token
