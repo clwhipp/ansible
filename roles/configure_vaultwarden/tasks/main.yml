@@ -24,21 +24,10 @@
     mode: "{{ item.mode }}"
   loop: "{{ vaultwarden_data_mounts }}"
 
-- name: Setup Service Secrets
-  import_tasks: secrets.yml
-
-- name: Ensure vars directory exists
-  file:
-    path: "{{ root_install_dir }}/vars"
-    state: directory
-    owner: "root"
-    group: "root"
-    mode: "700"
-
-- name: Deploy {{ root_install_dir }}/vars/vaultwarden-envvars.sh
+- name: Deploy Vaultwarden .env file into environment
   ansible.builtin.template:
-    src: "envvars.sh.j2"
-    dest: "{{ root_install_dir }}/vars/vaultwarden-envvars.sh"
-    owner: "root"
-    group: "root"
+    src: "docker-env-template.j2"
+    dest: "{{ docker_services_dir }}/bw/.env"
+    owner: "{{ user }}"
+    group: "{{ user }}"
     mode: '0400'

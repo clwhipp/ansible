@@ -4,9 +4,27 @@ user_uid: "{{ user_uid_v }}"
 user_shell: "/bin/bash"
 ssh_authorized_keys: "{{ ssh_authorized_keys_v }}"
 permit_ssh_password_login: "yes"
+
+# Domain and Certificates
 domain: "{{ domain_v }}"
 lan_range_cidr: "{{ lan_range_cidr_v }}"
 lets_encrypt_dir: "/etc/letsencrypt/archive"
+
+# Configuring Paths
+root_install_dir: "{{ root_install_dir_v }}"
+secrets_dir: "{{ root_install_dir }}/secrets"
+tls_certs_dir: "{{ root_install_dir }}/certs"
+scripts_dir: "{{ root_install_dir }}/scripts"
+
+data_dir: "/mnt/critical"
+backup_dir: "/mnt/backup"
+data_mounts:
+  - location: "{{ data_dir }}"
+    owner: "root"
+    mode: '0755'
+
+docker_services_dir: "{{ root_install_dir }}/services"
+docker_services_url: "git@github.com:clwhipp/docker-services.git"
 
 # Nebula Section
 # nebula_service_restart: false

@@ -40,18 +40,10 @@
     key: "{{ item }}"
   with_items: "{{ ssh_authorized_keys }}"
 
-- name: Ensure vars directory exists
-  file:
-    path: "{{ root_install_dir }}/vars"
-    state: directory
-    owner: "root"
-    group: "root"
-    mode: "700"
-
-- name: Deploy {{ root_install_dir }}/vars/jellyfin-envvars.sh
+- name: Deploy Jellyfin .env file into environment
   ansible.builtin.template:
-    src: "envvars.sh.j2"
-    dest: "{{ root_install_dir }}/vars/jellyfin-envvars.sh"
-    owner: "root"
-    group: "root"
+    src: "docker-env-template.j2"
+    dest: "{{ docker_services_dir }}/media/.env"
+    owner: "{{ user }}"
+    group: "{{ user }}"
     mode: '0400'
