@@ -5,18 +5,10 @@
     - configure_jellyfin
     - configure_nextcloud
     - configure_vaultwarden
-    - configure_lets_encrypt_cloudflare
     - configure_md_raid
-    - configure_backups
     - configure_iptables
 
   vars:
-
-    certificates:
-      - domain: "files.{{ domain }}"
-        account: "nc"
-      - domain: "warden.{{ domain }}"
-        account: "bw"
 
   vars_files: 
     - ../vars/env-secrets.yml

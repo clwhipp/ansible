@@ -1,3 +1,15 @@
+- name: Update apt package index
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Installing yubikey-luks dependencies
+  ansible.builtin.apt:
+    name:
+      - cryptsetup
+      - initramfs-tools
+      - yubikey-personalization
+    state: present
+
 - name: Removing /home/{{ user }}/yubikey-luks
   file:
     path: "/home/{{ user }}/yubikey-luks"
@@ -21,3 +33,4 @@
     clone: yes
     update: yes
   become: false
+

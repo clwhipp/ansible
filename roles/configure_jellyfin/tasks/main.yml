@@ -1,11 +1,3 @@
-- name: Ensure {{ root_install_dir }} exists
-  file:
-    path: "{{ root_install_dir }}"
-    state: directory
-    owner: "root"
-    group: "{{ user }}"
-    mode: '0750'
-
 - name: Ensure jellyfin linux accounts exist
   ansible.builtin.user:
     name: "{{ item.name }}"
@@ -47,3 +39,15 @@
     owner: "{{ user }}"
     group: "{{ user }}"
     mode: '0400'
+
+- name: Enable Jellyfin Backups
+  include_role:
+    name: configure_borg_backup
+    public: true
+  vars:
+    borg_src_dir: "{{ data_dir }}/jellyfin"
+    borg_repo_dir: "{{ backup_dir }}/borg-jellyfin"
+    borg_bws_secret_uid: 
+    borg_script_loc: "{{ scripts_dir }}/backup-borg-jellyfin.sh"
+    idrive_e2_target: "test_e2_url"
+    idrive_e2_bucket: "jellyfin-bucket"

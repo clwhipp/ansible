@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 
-export CRITICAL_BASE="{{ data_dir }}"
-export BORG_REPO="{{ backup_dir }}/borg"
-export BORG_PASSPHRASE_UID="{{ borg_repo_bws_uid }}"
+export BACKUP_BASE="{{ borg_src_dir }}"
+export BORG_REPO="{{ borg_repo_dir }}"
+export BORG_PASSPHRASE_UID="{{ borg_bws_secret_uid }}"
 export OFFLINE_BACKUP_USER="{{ user }}"
 
 source "{{ secrets_dir }}/.bws-token.sh"
@@ -37,10 +37,9 @@ function perform_backup(){
         --show-rc                       \
         --compression zstd,10           \
         --exclude-caches                \
-	--exclude "${CRITICAL_BASE}/media/*" \
                                         \
         ::'{{ borg_archive_selector }}-{now}'            \
-        ${CRITICAL_BASE}
+        ${BACKUP_BASE}
 
     backup_exit=$?
 
