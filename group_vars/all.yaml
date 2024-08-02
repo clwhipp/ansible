@@ -13,7 +13,6 @@ lets_encrypt_dir: "/etc/letsencrypt/archive"
 # Configuring Paths
 root_install_dir: "{{ root_install_dir_v }}"
 secrets_dir: "{{ root_install_dir }}/secrets"
-tls_certs_dir: "{{ root_install_dir }}/certs"
 scripts_dir: "{{ root_install_dir }}/scripts"
 
 data_dir: "/mnt/critical"

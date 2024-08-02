@@ -1,0 +1,29 @@
+- name: Install borg and rclone dependencies
+  ansible.builtin.apt:
+    name:
+      - unzip
+      - borgbackup
+    state: present
+
+- name: Download the latest rlcone package
+  get_url:
+    url: "https://downloads.rclone.org/rclone-current-linux-amd64.zip"
+    dest: "/home/{{ user }}/workspace/rclone-latest.zip"
+    mode: '0600'
+
+- name: Unzip the rclone package
+  unarchive:
+    src: "/home/{{ user }}/workspace/rclone-latest.zip"
+    dest: "/usr/bin"
+    owner: "root"
+    group: "root"
+    mode: "755"
+    remote_src: yes
+
+- name: Deploying {{ borg_script_loc }}
+  ansible.builtin.template:
+    src: "backup-borg-template.sh.j2"
+    dest: "{{ borg_script_loc }}"
+    owner: root
+    group: "root"
+    mode: '0500'

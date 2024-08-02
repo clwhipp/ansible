@@ -1,11 +1,3 @@
-- name: Ensure {{ root_install_dir }} exists
-  file:
-    path: "{{ root_install_dir }}"
-    state: directory
-    owner: "root"
-    group: "{{ user }}"
-    mode: '0750'
-
 - name: Ensure service accounts exist
   ansible.builtin.user:
     name: "{{ item.name }}"
@@ -32,14 +24,6 @@
     group: "{{ user }}"
     mode: '0400'
 
-- name: Ensure {{ scripts_dir }} exists
-  file:
-    path: "{{ scripts_dir }}"
-    state: directory
-    owner: "root"
-    group: "root"
-    mode: "755"
-
 - name: Update apt package index
   ansible.builtin.apt:
     update_cache: yes
@@ -57,3 +41,36 @@
     owner: root
     group: "root"
     mode: '0500'
+
+- name: Enable Nextcloud Backups
+  include_role:
+    name: configure_borg_backup
+    public: true
+  vars:
+    borg_src_dir: "{{ data_dir }}/nextcloud"
+    borg_repo_dir: "{{ backup_dir }}/borg"
+    borg_bws_secret_uid: 
+    borg_script_loc: "{{ scripts_dir }}/backup-borg-nextcloud.sh"
+    idrive_e2_target: "test_e2_url"
+    idrive_e2_bucket: "nextcloud-bucket"
+
+- name: Enable Mariadb Backups
+  include_role:
+    name: configure_borg_backup
+    public: true
+  vars:
+    borg_src_dir: "{{ data_dir }}/mariadb"
+    borg_repo_dir: "{{ backup_dir }}/borg-mariadb"
+    borg_bws_secret_uid: 
+    borg_script_loc: "{{ scripts_dir }}/backup-borg-mariadb.sh"
+    idrive_e2_target: "test_e2_url"
+    idrive_e2_bucket: "mariadb-bucket"
+
+- name: Deploy Nextcloud Let's Encrypt
+  include_role:
+    name: configure_lets_encrypt_cloudflare
+    public: true
+  vars:
+    account: "{{ svc_account }}"
+    cert_domain: "{{ svc_domain }}"
+    

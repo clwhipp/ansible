@@ -1,0 +1,8 @@
+borg_archive_selector: "stark"
+
+borg_src_dir: "{{ data_dir }}"
+borg_repo_dir: "{{ backup_dir }}/borg"
+borg_bws_secret_uid: ""
+
+idrive_e2_target: ""
+idrive_e2_bucket: ""

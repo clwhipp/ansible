@@ -1,0 +1,19 @@
+- name: Update apt package index
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install rsync dependencies
+  ansible.builtin.apt:
+    name:
+      - unzip
+      - rsync
+    state: present
+
+- name: Deploy backup-critical-rsync.sh
+  ansible.builtin.template:
+    src: "backup-critical-rsync.sh.j2"
+    dest: "{{ scripts_dir }}/backup-critical-rsync.sh"
+    owner: root
+    group: "root"
+    mode: '0500'
+

@@ -1,11 +1,3 @@
-- name: Ensure {{ root_install_dir }}/scripts exists
-  file:
-    path: "{{ root_install_dir }}/scripts"
-    state: directory
-    owner: "root"
-    group: "root"
-    mode: "755"
-
 - name: Install modified mdcheck script
   ansible.builtin.copy:
     src: "mdcheck"
@@ -54,14 +46,6 @@
     group: "root"
     mode: '0700'
 
-- name: Ensure {{ secrets_dir }} exists
-  file:
-    path: "{{ secrets_dir }}"
-    state: directory
-    owner: "root"
-    group: "root"
-    mode: "755"
-
 - name: Installing dm-integrity authentication key to {{ secrets_dir }}/dm-integrity-auth-key.bin
   shell: echo "{{ dm_integrity_key }}" | xxd -r -p - > "{{ secrets_dir }}/dm-integrity-auth-key.bin"
   no_log: true
@@ -74,6 +58,9 @@
     group: "root"
     mode: '0400'
 
+- name: Setup yubikey-luks integration
+  import_tasks: yubikey-luks.yml    
+
 - name: Deploy yubikey-luks unlock script for raids
   ansible.builtin.template:
     src: "unlock-with-yubikey.sh.j2"
@@ -81,3 +68,7 @@
     owner: root
     group: "root"
     mode: '0500'
+  
+- name: Setup rsync backup
+  import_tasks: rsync-backup.yml    
+

@@ -1,12 +1,4 @@
 
-- name: Ensure .ssh directory exists
-  file:
-    path: "/home/{{ user }}/.ssh"
-    state: directory
-    owner: "{{ user }}"
-    group: "{{ user }}"
-    mode: '0700'
-
 - name: Set authorized keys
   authorized_key:
     user: "{{ user }}"

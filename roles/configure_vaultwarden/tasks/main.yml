@@ -31,3 +31,23 @@
     owner: "{{ user }}"
     group: "{{ user }}"
     mode: '0400'
+
+- name: Enable Vaultwarden borg backups
+  include_role:
+    name: configure_borg_backup
+    public: true
+  vars:
+    borg_src_dir: "{{ data_dir }}/bitwarden"
+    borg_repo_dir: "{{ backup_dir }}/borg-bitwarden"
+    borg_bws_secret_uid: 
+    borg_script_loc: "{{ scripts_dir }}/backup-borg-vaultwarden.sh"
+    idrive_e2_target: "test_e2_url"
+    idrive_e2_bucket: "vaultwarden-bucket"
+
+- name: Deploy Vaultwarden Let's Encrypt
+  include_role:
+    name: configure_lets_encrypt_cloudflare
+    public: true
+  vars:
+    account: "{{ svc_account }}"
+    cert_domain: "{{ svc_domain }}"

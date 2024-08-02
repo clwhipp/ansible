@@ -13,3 +13,33 @@ permit_ssh_password_login: "yes"
 ssh_bantime: "1d"
 ssh_findtime: "1d"
 ssh_maxretry: "3"
+
+data_directories:
+
+  # user directories
+  - location: "/home/{{ user }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0700'
+  - location: "/home/{{ user }}/.ssh"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0700'
+  - location: "/home/{{ user }}/workspace"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0700'
+
+  # server side install directories
+  - location: "{{ root_install_dir }}"
+    owner: "root"
+    group: "{{ user }}"
+    mode: '0750'
+  - location: "{{ secrets_dir }}"
+    owner: "root"
+    group: "root"
+    mode: '0700'
+  - location: "{{ scripts_dir }}"
+    owner: "root"
+    group: "{{ user }}"
+    mode: '0750'
