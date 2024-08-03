@@ -1,7 +1,6 @@
 - hosts: nexus
   become: true
   roles:
-    - configure_cockpit
     - configure_jellyfin
     - configure_nextcloud
     - configure_vaultwarden
