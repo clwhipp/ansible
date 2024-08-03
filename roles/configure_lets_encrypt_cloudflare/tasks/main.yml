@@ -7,7 +7,7 @@
   ansible.builtin.template:
     src: "cloudflare.ini.j2"
     dest: "{{ secrets_dir }}/cloudflare.ini"
-    owner: root
+    owner: "root"
     group: "root"
     mode: '0500'
   when: not cloudflare_auth_token.stat.exists
@@ -23,6 +23,6 @@
   ansible.builtin.template:
     src: "issue-certificate.sh.j2"
     dest: "{{ scripts_dir }}/issue-{{ cert_domain }}.sh"
-    owner: root
+    owner: "root"
     group: "root"
     mode: '0500'
