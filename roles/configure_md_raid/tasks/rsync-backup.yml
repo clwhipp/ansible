@@ -5,7 +5,6 @@
 - name: Install rsync dependencies
   ansible.builtin.apt:
     name:
-      - unzip
       - rsync
     state: present
 

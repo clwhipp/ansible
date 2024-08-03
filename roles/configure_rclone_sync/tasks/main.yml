@@ -1,0 +1,36 @@
+- name: Install rclone dependencies
+  ansible.builtin.apt:
+    name:
+      - unzip
+    state: present
+
+- name: Download the latest rlcone package
+  get_url:
+    url: "https://downloads.rclone.org/rclone-current-linux-amd64.zip"
+    dest: "/home/{{ user }}/workspace/rclone-latest.zip"
+    mode: '0600'
+
+- name: Unzip the rclone package
+  unarchive:
+    src: "/home/{{ user }}/workspace/rclone-latest.zip"
+    dest: "/usr/bin"
+    owner: "root"
+    group: "root"
+    mode: "755"
+    remote_src: yes
+
+# TODO - fix the rclone binary installation
+
+- name: Adding {{ idrive_e2_target }} credentials into rclone configuration
+  rclone_config:
+    idrive_e2_target: "{{ idrive_e2_target }}"
+    idrive_e2_access_key_id: "{{ idrive_e2_access_key_id }}"
+    idrive_e2_secret_access_key: "{{ idrive_e2_secret_access_key }}"
+
+- name: Ensure rclone configuration permissions are correct
+  file:
+    path: "/root/.config/rclone/rclone.conf"
+    state: file
+    owner: "root"
+    group: "root"
+    mode: '0700'
