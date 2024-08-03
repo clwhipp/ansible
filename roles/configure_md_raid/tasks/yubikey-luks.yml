@@ -15,14 +15,6 @@
     path: "/home/{{ user }}/yubikey-luks"
     state: absent
 
-- name: Ensure /home/{{ user }} exists
-  file:
-    path: "/home/{{ user }}"
-    state: directory
-    owner: "{{ user }}"
-    group: "{{ user }}"
-    mode: '0700'
-
 - name: Cloning yubikey-luks to /home/{{ user }}/yubikey-luks
   ansible.builtin.git:
     repo: "git@github.com:clwhipp/yubikey-luks.git"

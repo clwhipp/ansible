@@ -24,10 +24,6 @@
     group: "{{ user }}"
     mode: '0400'
 
-- name: Update apt package index
-  ansible.builtin.apt:
-    update_cache: yes
-
 - name: Install MySQL Client for Backups
   ansible.builtin.apt:
     name:
@@ -38,7 +34,7 @@
   ansible.builtin.template:
     src: "backup-nextcloud-mariadb.sh.j2"
     dest: "{{ scripts_dir }}/backup-nextcloud-mariadb.sh"
-    owner: root
+    owner: "root"
     group: "root"
     mode: '0500'
 
@@ -47,24 +43,17 @@
     name: configure_borg_backup
     public: true
   vars:
+    # Borg - Encryption
     borg_src_dir: "{{ data_dir }}/nextcloud"
     borg_repo_dir: "{{ backup_dir }}/borg"
-    borg_bws_secret_uid: 
+    borg_bws_secret_uid: "{{ lookup('bitwarden_field', 'bws_secret_uid', 'borg - nextcloud') }}"
     borg_script_loc: "{{ scripts_dir }}/backup-borg-nextcloud.sh"
-    idrive_e2_target: "test_e2_url"
-    idrive_e2_bucket: "nextcloud-bucket"
 
-- name: Enable Mariadb Backups
-  include_role:
-    name: configure_borg_backup
-    public: true
-  vars:
-    borg_src_dir: "{{ data_dir }}/mariadb"
-    borg_repo_dir: "{{ backup_dir }}/borg-mariadb"
-    borg_bws_secret_uid: 
-    borg_script_loc: "{{ scripts_dir }}/backup-borg-mariadb.sh"
-    idrive_e2_target: "test_e2_url"
-    idrive_e2_bucket: "mariadb-bucket"
+    # IDrive E2 - Offsite Storage
+    idrive_e2_target: "idrive-e2-nextcloud"
+    idrive_e2_bucket: "borg-production"
+    idrive_e2_access_key_id: "{{ lookup('bitwarden_field', 'rclone_access_key_id', 'borg - nextcloud') }}"
+    idrive_e2_secret_access_key: "{{ lookup('bitwarden_field', 'rclone_secret_access_key', 'borg - nextcloud') }}"
 
 - name: Deploy Nextcloud Let's Encrypt
   include_role:
@@ -73,4 +62,3 @@
   vars:
     account: "{{ svc_account }}"
     cert_domain: "{{ svc_domain }}"
-    

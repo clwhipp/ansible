@@ -1,24 +1,8 @@
-- name: Install borg and rclone dependencies
+- name: Install borgbackup
   ansible.builtin.apt:
     name:
-      - unzip
       - borgbackup
     state: present
-
-- name: Download the latest rlcone package
-  get_url:
-    url: "https://downloads.rclone.org/rclone-current-linux-amd64.zip"
-    dest: "/home/{{ user }}/workspace/rclone-latest.zip"
-    mode: '0600'
-
-- name: Unzip the rclone package
-  unarchive:
-    src: "/home/{{ user }}/workspace/rclone-latest.zip"
-    dest: "/usr/bin"
-    owner: "root"
-    group: "root"
-    mode: "755"
-    remote_src: yes
 
 - name: Deploying {{ borg_script_loc }}
   ansible.builtin.template:
@@ -27,3 +11,12 @@
     owner: root
     group: "root"
     mode: '0500'
+
+- name: Enable rclone synchronization for {{ borg_script_loc }}
+  include_role:
+    name: configure_rclone_sync
+    public: true
+  vars:
+    idrive_e2_target: "{{ idrive_e2_target }}"
+    idrive_e2_access_key_id: "{{ idrive_e2_access_key_id }}"
+    idrive_e2_secret_access_key: "{{ idrive_e2_secret_access_key }}"

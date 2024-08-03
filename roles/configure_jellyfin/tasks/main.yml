@@ -45,9 +45,14 @@
     name: configure_borg_backup
     public: true
   vars:
+    # Borg - Encryption
     borg_src_dir: "{{ data_dir }}/jellyfin"
     borg_repo_dir: "{{ backup_dir }}/borg-jellyfin"
-    borg_bws_secret_uid: 
+    borg_bws_secret_uid: "{{ lookup('bitwarden_field', 'bws_secret_uid', 'borg - jellyfin') }}"
     borg_script_loc: "{{ scripts_dir }}/backup-borg-jellyfin.sh"
-    idrive_e2_target: "test_e2_url"
-    idrive_e2_bucket: "jellyfin-bucket"
+
+    # IDrive E2 - Offsite Storage
+    idrive_e2_target: "idrive-e2-jellyfin"
+    idrive_e2_bucket: "jellyfin-backup"
+    idrive_e2_access_key_id: "{{ lookup('bitwarden_field', 'rclone_access_key_id', 'borg - jellyfin') }}"
+    idrive_e2_secret_access_key: "{{ lookup('bitwarden_field', 'rclone_secret_access_key', 'borg - jellyfin') }}"
