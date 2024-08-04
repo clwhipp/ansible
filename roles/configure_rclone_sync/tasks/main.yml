@@ -13,13 +13,36 @@
 - name: Unzip the rclone package
   unarchive:
     src: "/home/{{ user }}/workspace/rclone-latest.zip"
+    dest: "/home/{{ user }}/workspace/rclone_setup"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: "755"
+    remote_src: yes
+
+- name: Find the sub-directory created after unzipping
+  find:
+    paths: "/home/{{ user }}/workspace/rclone_setup"
+    file_type: directory
+    depth: 1
+  register: subdir
+
+- name: Set fact for sub-directory name
+  set_fact:
+    subdir_name: "{{ subdir.files[0].path }}"
+
+- name: Copy rclone binary into /usr/bin
+  copy:
+    src: "{{ subdir_name }}/rclone"
     dest: "/usr/bin"
     owner: "root"
     group: "root"
     mode: "755"
     remote_src: yes
 
-# TODO - fix the rclone binary installation
+- name: Delete a directory
+  file:
+    path: "/home/{{ user }}/workspace/rclone_setup"
+    state: absent
 
 - name: Adding {{ idrive_e2_target }} credentials into rclone configuration
   rclone_config:
