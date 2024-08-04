@@ -1,3 +1,10 @@
+- name: Installing raid and yubikey-luks packages
+  ansible.builtin.apt:
+    name:
+      - yubikey-luks
+      - yubikey-personalization
+    state: present
+
 - name: Install modified mdcheck script
   ansible.builtin.copy:
     src: "mdcheck"
@@ -57,9 +64,6 @@
     owner: "root"
     group: "root"
     mode: '0400'
-
-- name: Setup yubikey-luks integration
-  import_tasks: yubikey-luks.yml    
 
 - name: Deploy yubikey-luks unlock script for raids
   ansible.builtin.template:

@@ -32,22 +32,22 @@ def update_rclone_config(target, access_key_id, secret_access_key):
 def main():
     module = AnsibleModule(
         argument_spec=dict(
-            idrive_e2_target=dict(type='str', required=True),
-            idrive_e2_access_key_id=dict(type='str', required=True),
-            idrive_e2_secret_access_key=dict(type='str', required=True),
+            target=dict(type='str', required=True),
+            access_key_id=dict(type='str', required=True),
+            secret_access_key=dict(type='str', required=True),
         ),
         supports_check_mode=True
     )
 
-    idrive_e2_target = module.params['idrive_e2_target']
-    idrive_e2_access_key_id = module.params['idrive_e2_access_key_id']
-    idrive_e2_secret_access_key = module.params['idrive_e2_secret_access_key']
+    target = module.params['target']
+    access_key_id = module.params['access_key_id']
+    secret_access_key = module.params['secret_access_key']
 
     if module.check_mode:
         module.exit_json(changed=False)
 
     try:
-        update_rclone_config(idrive_e2_target, idrive_e2_access_key_id, idrive_e2_secret_access_key)
+        update_rclone_config(target, access_key_id, secret_access_key)
         module.exit_json(changed=True)
     except Exception as e:
         module.fail_json(msg="Error updating YAML file: {}".format(e))
