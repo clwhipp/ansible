@@ -17,6 +17,6 @@
     name: configure_rclone_sync
     public: true
   vars:
-    idrive_e2_target: "{{ idrive_e2_target }}"
-    idrive_e2_access_key_id: "{{ idrive_e2_access_key_id }}"
-    idrive_e2_secret_access_key: "{{ idrive_e2_secret_access_key }}"
+    target: "{{ idrive_e2_target }}"
+    access_key_id: "{{ idrive_e2_access_key_id }}"
+    secret_access_key: "{{ idrive_e2_secret_access_key }}"

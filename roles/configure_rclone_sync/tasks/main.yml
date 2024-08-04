@@ -9,11 +9,17 @@
     path: /usr/bin/rclone
   register: rclone_stat
 
-- name: Download the latest rlcone package
+- name: Download the latest rclone package
   get_url:
     url: "https://downloads.rclone.org/rclone-current-linux-amd64.zip"
     dest: "/home/{{ user }}/workspace/rclone-latest.zip"
     mode: '0600'
+  when: not rclone_stat.stat.exists
+
+- name: Create temporary directory
+  file:
+    path: "/home/{{ user }}/workspace/rclone_setup"
+    state: directory
   when: not rclone_stat.stat.exists
 
 - name: Unzip the rclone package
@@ -57,9 +63,9 @@
 
 - name: Adding {{ idrive_e2_target }} credentials into rclone configuration
   rclone_config:
-    idrive_e2_target: "{{ idrive_e2_target }}"
-    idrive_e2_access_key_id: "{{ idrive_e2_access_key_id }}"
-    idrive_e2_secret_access_key: "{{ idrive_e2_secret_access_key }}"
+    target: "{{ idrive_e2_target }}"
+    access_key_id: "{{ idrive_e2_access_key_id }}"
+    secret_access_key: "{{ idrive_e2_secret_access_key }}"
 
 - name: Ensure rclone configuration permissions are correct
   file:

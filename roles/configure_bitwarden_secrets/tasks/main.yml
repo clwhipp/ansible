@@ -5,17 +5,24 @@
       - jq
     state: present
 
+- name: Check if bws already installed
+  stat:
+    path: /usr/bin/bws
+  register: bws_stat
+
 - name: Downloading Bitwarden Secrets Manager CLI
   get_url:
     url: https://github.com/bitwarden/sdk/releases/download/bws-v0.5.0/bws-x86_64-unknown-linux-gnu-0.5.0.zip
     dest: "/home/{{ user }}/workspace/bws.zip"
     mode: '0600'
+  when: not bws_stat.stat.exists
 
 - name: Unzipping Bitwarden Secrets Manager Archive
   unarchive:
     src: "/home/{{ user }}/workspace/bws.zip"
     dest: /usr/bin
     remote_src: yes
+  when: not bws_stat.stat.exists
 
 - name: Adjust ownership and permissions
   file:
@@ -23,6 +30,7 @@
     owner: root
     group: root
     mode: '0755'
+  when: not bws_stat.stat.exists
 
 - name: Check if bws token file present
   ansible.builtin.stat:
