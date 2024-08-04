@@ -4,11 +4,17 @@
       - unzip
     state: present
 
+- name: Check if rclone already installed
+  stat:
+    path: /usr/bin/rclone
+  register: rclone_stat
+
 - name: Download the latest rlcone package
   get_url:
     url: "https://downloads.rclone.org/rclone-current-linux-amd64.zip"
     dest: "/home/{{ user }}/workspace/rclone-latest.zip"
     mode: '0600'
+  when: not rclone_stat.stat.exists
 
 - name: Unzip the rclone package
   unarchive:
@@ -18,6 +24,7 @@
     group: "{{ user }}"
     mode: "755"
     remote_src: yes
+  when: not rclone_stat.stat.exists
 
 - name: Find the sub-directory created after unzipping
   find:
@@ -25,24 +32,28 @@
     file_type: directory
     depth: 1
   register: subdir
+  when: not rclone_stat.stat.exists
 
 - name: Set fact for sub-directory name
   set_fact:
     subdir_name: "{{ subdir.files[0].path }}"
+  when: not rclone_stat.stat.exists
 
 - name: Copy rclone binary into /usr/bin
   copy:
     src: "{{ subdir_name }}/rclone"
-    dest: "/usr/bin"
+    dest: "/usr/bin/rclone"
     owner: "root"
     group: "root"
     mode: "755"
     remote_src: yes
+  when: not rclone_stat.stat.exists
 
 - name: Delete a directory
   file:
     path: "/home/{{ user }}/workspace/rclone_setup"
     state: absent
+  when: not rclone_stat.stat.exists
 
 - name: Adding {{ idrive_e2_target }} credentials into rclone configuration
   rclone_config:
