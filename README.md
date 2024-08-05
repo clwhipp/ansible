@@ -1,5 +1,3 @@
-# net-ansible
-
 # Ansible Host Setup
 
 # Server Setup and Bootstrap
