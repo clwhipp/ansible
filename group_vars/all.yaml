@@ -25,6 +25,9 @@ data_mounts:
 docker_services_dir: "{{ root_install_dir }}/services"
 docker_services_url: "git@github.com:clwhipp/docker-services.git"
 
+yubikey_utils_dir: "/home/{{ user }}/workspace/yubikey-utils"
+yubikey_utils_url: "git@github.com:clwhipp/yubikey-utils.git"
+
 # Nebula Section
 # nebula_service_restart: false
 # nebula_lighthouse: "vpn.{{ domain }}"

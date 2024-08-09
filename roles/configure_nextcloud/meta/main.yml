@@ -1,3 +1,2 @@
 dependencies:
-  - configure_repos
   - configure_docker

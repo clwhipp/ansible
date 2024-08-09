@@ -1,7 +1,6 @@
-- name: Installing raid and yubikey-luks packages
+- name: Installing raid and yubikey dependencies packages
   ansible.builtin.apt:
     name:
-      - yubikey-luks
       - yubikey-personalization
     state: present
 
@@ -72,7 +71,24 @@
     owner: root
     group: "root"
     mode: '0500'
-  
+
+- name: Cloning {{ yubikey_utils_url }} to {{ yubikey_utils_dir }}
+  ansible.builtin.git:
+    repo: "{{ yubikey_utils_url }}"
+    dest: "{{ yubikey_utils_dir }}"
+    key_file: "/home/{{ user }}/.ssh/id_ed25519"
+    accept_hostkey: yes
+    update: yes
+    clone: yes
+    force: yes
+  become: false
+
+- name: Running {{ yubikey_utils_dir }}/install.sh
+  command: "{{ yubikey_utils_dir }}/install.sh"
+  args:
+    chdir: "{{ yubikey_utils_dir }}"
+  become: yes
+
 - name: Setup rsync backup
   import_tasks: rsync-backup.yml    
 

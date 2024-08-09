@@ -23,3 +23,15 @@
     owner: "{{ user }}"
     group: "{{ user }}"
     mode: '0700'
+
+- name: Set user.name to {{ git_name_v }}
+  git_config:
+    name: user.name
+    value: "{{ git_name_v }}"
+    scope: global
+
+- name: Set user.email to {{ git_email_v }}
+  git_config:
+    name: user.email
+    value: "{{ git_email_v }}"
+    scope: global

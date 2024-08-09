@@ -1,7 +1,3 @@
-- name: Update apt package index
-  ansible.builtin.apt:
-    update_cache: yes
-
 - name: Install rsync dependencies
   ansible.builtin.apt:
     name:

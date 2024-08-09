@@ -46,3 +46,40 @@
     name: "{{ user }}"
     groups: docker
     append: yes
+
+- name: Check if {{ docker_services_dir }} exists
+  ansible.builtin.stat:
+    path: "{{ docker_services_dir }}"
+  register: docker_repo_stat
+
+- name: Create {{ docker_services_dir }}
+  file:
+    path: "{{ docker_services_dir }}"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0700'
+  when: not docker_repo_stat.stat.exists
+
+- name: Cloning {{ docker_services_url }} to {{ docker_services_dir }}
+  ansible.builtin.git:
+    repo: "{{ docker_services_url }}"
+    dest: "{{ docker_services_dir }}"
+    key_file: "/home/{{ user }}/.ssh/id_ed25519"
+    accept_hostkey: yes
+    update: yes
+    clone: yes
+    force: yes
+  become: false
+  when: not docker_repo_stat.stat.exists
+
+- name: Adjusting permissions of {{ docker_services_dir }}
+  file:
+    path: "{{ docker_services_dir }}"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    recurse: yes
+    mode: '0700'
+  when: not docker_repo_stat.stat.exists
+
