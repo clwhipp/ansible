@@ -1,0 +1,11 @@
+- hosts: ns
+  become: true
+  roles:
+    - configure_pihole
+    - configure_iptables
+    - configure_wireguard
+
+  vars:
+
+  vars_files: 
+    - ../vars/env-secrets.yml

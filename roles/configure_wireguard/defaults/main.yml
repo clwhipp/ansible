@@ -1,0 +1,5 @@
+wg_interface: wg0
+wg_port: 51820
+wg_private_key_path: "/etc/wireguard/private.key"
+wg_public_key_path: "/etc/wireguard/public.key"
+wireguard_preshared_key: "{{ lookup('bitwarden_password', 'wireguard_preshared_key') }}"

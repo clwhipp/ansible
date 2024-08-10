@@ -1,0 +1,24 @@
+- name: Ensure data directories exist for pihole
+  file:
+    path: "{{ item.location }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    group: "{{ item.owner }}"
+    mode: "{{ item.mode }}"
+  loop: "{{ pihole_data_mounts }}"
+
+- name: Deploy PiHole .env file into environment
+  ansible.builtin.template:
+    src: "docker-env-template.j2"
+    dest: "{{ docker_services_dir }}/ns/.env"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0400'
+
+- name: Deploy PiHole Let's Encrypt
+  include_role:
+    name: configure_lets_encrypt_cloudflare
+    public: true
+  vars:
+    account: "{{ svc_account }}"
+    cert_domain: "{{ svc_domain }}"

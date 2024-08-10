@@ -1,0 +1,19 @@
+pihole_admin_password: "{{ lookup('bitwarden_password', 'pihole_admin_password') }}"
+
+pihole_data_mounts:
+  - location: "{{ data_dir }}"
+    owner: "root"
+    mode: '0755'
+  - location: "{{ data_dir }}/pihole"
+    owner: "root"
+    mode: '0700'
+  - location: "{{ data_dir }}/ts/pihole"
+    owner: "root"
+    mode: '0700'
+  - location: "{{ certs_dir }}"
+    owner: "root"
+    mode: '0700'
+
+csr_cn: "ns"
+svc_domain: "ns.{{ domain }}"
+svc_account: "root"

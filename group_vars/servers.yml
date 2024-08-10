@@ -1,0 +1,7 @@
+wg_clients:
+  - name: ipad
+    address: "10.0.0.2/32"
+    public_key: "FGKR/KSP2Xck+m3TyJGIJpLW6rPl44FlaNyFYDS7MzI="
+  - name: alien-16
+    address: "10.0.0.3/32"
+    public_key: "BNQ0MXSEkyjIzqDp6LqxwQQoqF7As4eCaSTdh2WmqFg="

@@ -1,0 +1,12 @@
+[Interface]
+PrivateKey = {{ wg_private_key.stdout }}
+Address = {{ wireguard_ip }}/24
+ListenPort = {{ wg_port }}
+
+{% for client in wg_clients %}
+
+[Peer]
+PublicKey = {{ client.public_key }}
+PresharedKey = {{ wireguard_preshared_key }}
+AllowedIPs = {{ client.address }}
+{% endfor %}

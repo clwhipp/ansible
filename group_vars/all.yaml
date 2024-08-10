@@ -14,6 +14,7 @@ lets_encrypt_dir: "/etc/letsencrypt/archive"
 root_install_dir: "{{ root_install_dir_v }}"
 secrets_dir: "{{ root_install_dir }}/secrets"
 scripts_dir: "{{ root_install_dir }}/scripts"
+certs_dir: "{{ root_install_dir }}/certs"
 
 data_dir: "/mnt/critical"
 backup_dir: "/mnt/backup"
