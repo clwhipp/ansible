@@ -1,0 +1,33 @@
+- name: Check if /usr/bin/tailscale exists
+  stat:
+    path: /usr/bin/tailscale
+  register: tailscale_binary
+
+- name: Inserting tailscale installation script
+  copy:
+    src: "tailscale-installer.sh"
+    dest: "{{ scripts_dir }}/tailscale-installer.sh"
+    owner: "root"
+    group: "root"
+    mode: '0500'
+  when: not tailscale_binary.stat.exists
+
+- name: Installing tailscale
+  shell: "{{ scripts_dir }}/tailscale-installer.sh"
+  args:
+    chdir: "{{ scripts_dir }}"
+  when: not tailscale_binary.stat.exists
+
+- name: Authenticate and start Tailscale
+  shell: tailscale up --authkey={{ TAILSCALE_AUTH_KEY }} # Replace with your actual Tailscale auth key
+  register: tailscale_up_result
+  changed_when: "'Already' not in tailscale_up_result.stdout"
+  when: not tailscale_binary.stat.exists
+
+- name: Retrieve the Tailscale IP address
+  shell: tailscale ip -4
+  register: tailscale_ip_command
+
+- name: Set the Tailscale IP address to a variable
+  set_fact:
+    system_tailscale_ip: "{{ tailscale_ip_command.stdout.strip() }}"

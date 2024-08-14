@@ -29,6 +29,4 @@ docker_services_url: "git@github.com:clwhipp/docker-services.git"
 yubikey_utils_dir: "/home/{{ user }}/workspace/yubikey-utils"
 yubikey_utils_url: "git@github.com:clwhipp/yubikey-utils.git"
 
-
-
-# IPTables Section
+nebula_ip: "10.10.0.1"
