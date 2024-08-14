@@ -1,0 +1,1 @@
+TAILSCALE_AUTH_KEY:  "{{ lookup('bitwarden_password', 'TAILSCALE_AUTH_KEY') }}"
