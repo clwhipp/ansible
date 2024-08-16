@@ -37,9 +37,9 @@
     path: "{{ secrets_dir }}/.bws-token.sh"
   register: bws_secret_present
 
-- name: Downloading Biwarden Secrets Access Key
-  ansible.builtin.copy:
-    src: "bws-token.sh"
+- name: Injection Bitwarden Secrets Manager Token
+  ansible.builtin.template:
+    src: "bws-token.sh.j2"
     dest: "{{ secrets_dir }}/.bws-token.sh"
     owner: root
     group: root

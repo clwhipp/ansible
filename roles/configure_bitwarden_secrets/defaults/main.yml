@@ -1,0 +1,1 @@
+bws_access_token: "{{ lookup('bitwarden_password', 'bws_access_token') }}"
