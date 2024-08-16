@@ -12,3 +12,11 @@
     group: "root"
     mode: '0500'
 
+- name: Adding Critical RAID rsync to crontab
+  cron:
+    name: "Critical RAID rsync"
+    minute: "0"
+    hour: "2"
+    job: "{{ scripts_dir }}/backup-critical-rsync.sh"
+    user: "root"
+
