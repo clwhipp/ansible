@@ -41,6 +41,14 @@
     idrive_e2_access_key_id: "{{ lookup('bitwarden_field', 'rclone_access_key_id', 'borg - vaultwarden') }}"
     idrive_e2_secret_access_key: "{{ lookup('bitwarden_field', 'rclone_secret_access_key', 'borg - vaultwarden') }}"
 
+- name: Adding Vaultwarden backup task to crontab
+  cron:
+    name: "Vaultwarden Backup"
+    minute: "0"
+    hour: "3"
+    job: "{{ scripts_dir }}/backup-borg-vaultwarden.sh"
+    user: "root"
+
 - name: Deploy Vaultwarden Let's Encrypt
   include_role:
     name: configure_lets_encrypt_cloudflare

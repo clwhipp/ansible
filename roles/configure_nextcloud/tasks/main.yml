@@ -38,6 +38,14 @@
     group: "root"
     mode: '0500'
 
+- name: Adding Nextcloud mariadb backup task to crontab
+  cron:
+    name: "Nextcloud MariaDB"
+    minute: "0"
+    hour: "1"
+    job: "{{ scripts_dir }}/backup-nextcloud-mariadb.sh"
+    user: "root"
+
 - name: Enable Nextcloud Backups
   include_role:
     name: configure_borg_backup
@@ -54,6 +62,14 @@
     idrive_e2_bucket: "borg-production"
     idrive_e2_access_key_id: "{{ lookup('bitwarden_field', 'rclone_access_key_id', 'borg - nextcloud') }}"
     idrive_e2_secret_access_key: "{{ lookup('bitwarden_field', 'rclone_secret_access_key', 'borg - nextcloud') }}"
+
+- name: Adding Nextcloud backup task to crontab
+  cron:
+    name: "Nextcloud Backup"
+    minute: "0"
+    hour: "4"
+    job: "{{ scripts_dir }}/backup-borg-nextcloud.sh"
+    user: "root"
 
 - name: Deploy Nextcloud Let's Encrypt
   include_role:

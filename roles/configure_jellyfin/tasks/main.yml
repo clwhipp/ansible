@@ -56,3 +56,11 @@
     idrive_e2_bucket: "jellyfin-backup"
     idrive_e2_access_key_id: "{{ lookup('bitwarden_field', 'rclone_access_key_id', 'borg - jellyfin') }}"
     idrive_e2_secret_access_key: "{{ lookup('bitwarden_field', 'rclone_secret_access_key', 'borg - jellyfin') }}"
+
+- name: Adding Jellyfin backup task to crontab
+  cron:
+    name: "Jellyfin Backup"
+    minute: "30"
+    hour: "3"
+    job: "{{ scripts_dir }}/backup-borg-jellyfin.sh"
+    user: "root"
