@@ -37,3 +37,11 @@
     value: "{{ git_email_v }}"
     scope: global
   become: no
+
+- name: Set core.fileMode to no
+  git_config:
+    name: core.fileMode
+    value: "false"
+    scope: global
+  become: no
+
