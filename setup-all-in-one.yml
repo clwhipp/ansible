@@ -7,6 +7,7 @@
     - configure_pihole
     - configure_md_raid
     - configure_iptables
+    - configure_wireguard
 
   vars:
 

@@ -37,7 +37,3 @@
     value: "{{ git_email_v }}"
     scope: global
   become: no
-
-- name: Disbling file mode checks within git
-  command: git config core.fileMode false
-  become: no

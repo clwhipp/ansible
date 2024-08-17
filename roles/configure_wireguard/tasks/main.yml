@@ -1,12 +1,8 @@
-- name: Install WireGuard
+- name: Install Wireguard
   apt:
-    name: wireguard
-    state: present
-    update_cache: yes
-
-- name: Install WireGuard tools
-  apt:
-    name: wireguard-tools
+    name:
+      - wireguard
+      - wireguard-tools
     state: present
 
 - name: Ensure /etc/wireguard directory exists
@@ -17,34 +13,12 @@
     group: "root"
     mode: '0700'
 
-- name: Check if WireGuard private key exists
-  stat:
-    path: "{{ wg_private_key_path }}"
-  register: private_key_exists
-
-- name: Generate WireGuard private key if it doesn't exist
-  command: wg genkey > "{{ wg_private_key_path }}"
-  when: not private_key_exists.stat.exists
-
-- name: Set permissions on wireguard private key
-  file:
-    path: "{{ wg_private_key_path }}"
-    state: file
-    owner: "root"
-    group: "root"
-    mode: '0600'
-
-- name: Load existing private key if it exists
-  command: cat "{{ wg_private_key_path }}"
-  register: wg_private_key
-
-- name: Generate WireGuard public key if it doesn't exist
-  shell: wg pubkey < "{{ wg_private_key_path }}" > "{{ wg_public_key_path }}"
-
 - name: Generate WireGuard configuration
   template:
     src: wireguard.conf.j2
     dest: "/etc/wireguard/{{ wg_interface }}.conf"
+    owner: "root"
+    group: "root"
     mode: '0600'
 
 - name: Enable and start WireGuard
