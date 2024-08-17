@@ -21,3 +21,6 @@
     owner: "root"
     group: "root"
     mode: '0500'
+
+- name: Configuring IPTables
+  command: "{{ scripts_dir }}/iptables-setup.sh"

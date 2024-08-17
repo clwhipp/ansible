@@ -33,6 +33,13 @@
     mode: "700"
   loop: "{{ mdcheck_map }}"
 
+- name: Enable mdcheck start services
+  systemd:
+    name: mdcheck_{{ item.device }}_start
+    enabled: yes
+    state: started
+  loop: "{{ mdcheck_map }}"
+
 # Install service and timer for enabling continuation of raid scrubbing
 # sessions on a nightly basis.
 
@@ -51,6 +58,12 @@
     owner: "root"
     group: "root"
     mode: '0700'
+
+- name: Enable mdcheck continue service
+  systemd:
+    name: mdcheck_continue
+    enabled: yes
+    state: started
 
 - name: Installing dm-integrity authentication key to {{ secrets_dir }}/dm-integrity-auth-key.bin
   shell: echo "{{ dm_integrity_key }}" | xxd -r -p - > "{{ secrets_dir }}/dm-integrity-auth-key.bin"
