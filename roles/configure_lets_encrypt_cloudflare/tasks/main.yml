@@ -19,6 +19,14 @@
       - python3-pip
     state: present
 
+- name: Ensure {{ lets_encrypt_dir }} exists with correct permissions
+  file:
+    path: "{{ lets_encrypt_dir }}"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: "755"
+
 - name: Deploy let's encrypt script for {{ cert_domain }}
   ansible.builtin.template:
     src: "issue-certificate.sh.j2"
@@ -27,10 +35,6 @@
     group: "root"
     mode: '0500'
 
-- name: Ensure {{ lets_encrypt_dir }} exists with correct permissions
-  file:
-    path: "{{ lets_encrypt_dir }}"
-    state: directory
-    owner: "root"
-    group: "root"
-    mode: "755"
+- name: Requesting certificate for {{ cert_domain }}
+  command: "{{ scripts_dir }}/issue-{{ cert_domain }}.sh"
+
