@@ -26,3 +26,11 @@
     owner: "root"
     group: "root"
     mode: '0500'
+
+- name: Ensure {{ lets_encrypt_dir }} exists with correct permissions
+  file:
+    path: "{{ lets_encrypt_dir }}"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: "755"

@@ -8,7 +8,7 @@ permit_ssh_password_login: "yes"
 # Domain and Certificates
 domain: "{{ domain_v }}"
 lan_range_cidr: "{{ lan_range_cidr_v }}"
-lets_encrypt_dir: "/etc/letsencrypt/archive"
+lets_encrypt_dir: "/etc/letsencrypt/live"
 
 # Configuring Paths
 root_install_dir: "{{ root_install_dir_v }}"

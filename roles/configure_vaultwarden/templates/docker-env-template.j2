@@ -3,8 +3,8 @@ DATA_DIR={{ data_dir }}
 
 # Bitwarden
 BITWARDEN_DOMAIN={{ svc_domain }}
-BITWARDEN_TLS_KEY_LOCATION="{{ lets_encrypt_dir }}/{{ svc_domain }}/fullchain1.pem"
-BITWARDEN_TLS_CERT_LOCATION="{{ lets_encrypt_dir }}/{{ svc_domain }}/privkey1.pem"
+BITWARDEN_TLS_CERT_LOCATION="{{ lets_encrypt_dir }}/{{ svc_domain }}/fullchain.pem"
+BITWARDEN_TLS_KEY_LOCATION="{{ lets_encrypt_dir }}/{{ svc_domain }}/privkey.pem"
 
 ## Adjustable for testing/development
 LOGIN_RATELIMIT_SECONDS=60
