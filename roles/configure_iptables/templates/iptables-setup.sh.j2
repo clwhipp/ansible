@@ -41,7 +41,7 @@ function iptables_add_default_rules(){
     iptables -A INPUT -s {{ lan_range_cidr }} -p tcp --dport {{ ssh_port_v }} -j ACCEPT
     
     # allow wireguard connections for administrative access
-    iptables -A INPUT -s {{ lan_range_cidr }} -p tcp --dport 51820 -j ACCEPT
+    iptables -A INPUT -s {{ lan_range_cidr }} -p udp --dport 51820 -j ACCEPT
     iptables -A INPUT -s 10.0.0.0/24 -j ACCEPT
 
     # enable dns resolution with local resolver
