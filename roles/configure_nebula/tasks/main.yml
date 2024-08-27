@@ -9,8 +9,8 @@
 - name: Setup Nebula Binaries
   import_tasks: package-installation.yml
 
-- name: Generate Host Nebula Keys
-  import_tasks: generate-keys.yml
+- name: Install Nebula Keys and Certificates
+  import_tasks: key-installation.yml
 
 - name: Generate Host Configuration
   import_tasks: host-config.yml
@@ -22,9 +22,6 @@
     owner: root
     group: root
     mode: '0644'
-
-- include_tasks: sign-keys.yml
-  when: nebula_sign_enable
 
 - name: Restart nebula service
   service:

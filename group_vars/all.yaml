@@ -29,22 +29,6 @@ docker_services_url: "git@github.com:clwhipp/docker-services.git"
 yubikey_utils_dir: "/home/{{ user }}/workspace/yubikey-utils"
 yubikey_utils_url: "git@github.com:clwhipp/yubikey-utils.git"
 
-# Nebula Section
-# nebula_service_restart: false
-# nebula_lighthouse: "vpn.{{ domain }}"
-# nebula_sign_enable: false
-# nebula_sign_profile: ""
-# nebula_is_lighthouse: false
-# nebula_user: "nebula"
-# nebula_install_dir: "/etc/nebula"
-# nebula_tunnel_name: nebula1
-# nebula_log_level: info
-# nebula_port: "{{ nebula_port_v }}"
-# nebula_range_cidr: "{{ nebula_range_cidr_v }}"
-# nebula_inbound_rules:
-# 
-#   - port: "{{ ssh_port_v }}"
-#     proto: tcp
-#     group: acl:admin
+
 
 # IPTables Section

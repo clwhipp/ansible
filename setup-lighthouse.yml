@@ -1,0 +1,9 @@
+- hosts: vpn
+  become: true
+  roles:
+    - configure_nebula
+
+  vars:
+
+  vars_files: 
+    - ../vars/env-secrets.yml

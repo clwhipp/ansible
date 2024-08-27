@@ -1,22 +1,17 @@
-# requires changing for each setup
-nebula_lighthouse: ""
-nebula_ca_sha: ""
-
-# Associated with enabling automated signing
-nebula_sign_enable: false
-nebula_sign_profile: ""
-
-# default values should be good for most use cases
+nebula_ca_sha: "{{ nebula_ca_sha_v }}"
+nebula_service_restart: false
+nebula_lighthouse: "vpn.{{ domain }}"
 nebula_is_lighthouse: false
 nebula_user: "nebula"
 nebula_install_dir: "/etc/nebula"
-nebula_port: 4242
 nebula_tunnel_name: nebula1
 nebula_log_level: info
-
-# Default access is SSH for admin devices
+nebula_port: "{{ nebula_port_v }}"
+nebula_range_cidr: "{{ nebula_range_cidr_v }}"
+nebula_cert_dir: "/home/{{ user }}/Certificates"
 nebula_inbound_rules:
 
-  - port: 22
+  - port: "{{ ssh_port_v }}"
     proto: tcp
-    group: acl:admin
+    acl_group: admin
+

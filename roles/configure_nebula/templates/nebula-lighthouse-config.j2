@@ -173,6 +173,6 @@ firewall:
       group: acl:admin
 
     - port: {{ nebula_port }}
-      proto: tcp
-      ca_sha: {{ ca_sha }}
+      proto: udp
+      ca_sha: {{ nebula_ca_sha_v }}
 

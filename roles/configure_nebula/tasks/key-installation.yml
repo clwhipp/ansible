@@ -1,0 +1,31 @@
+- name: Ensure {{ nebula_install_dir }} exists
+  file:
+    path: "{{ nebula_install_dir }}"
+    state: directory
+    owner: "root"
+    group: "{{ nebula_user }}"
+    mode: "750"
+
+- name: Install ca certificate
+  ansible.builtin.copy:
+    src: "{{ nebula_cert_dir }}/ca.crt"
+    dest: "{{ nebula_install_dir }}/ca.crt"
+    owner: "root"
+    group: "{{ nebula_user }}"
+    mode: '0550'
+
+- name: Install host key
+  ansible.builtin.copy:
+    src: "{{ nebula_cert_dir }}/{{ fqdn }}.key"
+    dest: "{{ nebula_install_dir }}/host.key"
+    owner: "root"
+    group: "{{ nebula_user }}"
+    mode: '0550'
+
+- name: Install host certificate
+  ansible.builtin.copy:
+    src: "{{ nebula_cert_dir }}/{{ fqdn }}.crt"
+    dest: "{{ nebula_install_dir }}/host.crt"
+    owner: "root"
+    group: "{{ nebula_user }}"
+    mode: '0550'

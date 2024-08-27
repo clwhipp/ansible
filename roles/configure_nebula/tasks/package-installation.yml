@@ -6,9 +6,9 @@
     group: "{{ nebula_user }}"
     mode: '0750'
 
-- name: Copy Nebula binaries
-  ansible.builtin.copy:
-    src: linux-amd64-v1.8.2+.tar.gz
+- name: Download Nebula binaries
+  get_url:
+    url: "https://github.com/user-attachments/files/16754464/linux-amd64-v1.9.3%2B.tar.gz"
     dest: "/home/{{ nebula_user }}/Documents/nebula-linux-amd64.tar.gz"
     owner: "{{ nebula_user }}"
     group: "{{ nebula_user }}"
@@ -30,7 +30,7 @@
 
 - name: Install nebula binary
   ansible.builtin.copy:
-    src: "/home/{{ nebula_user }}/Documents/nebula"
+    src: "/home/{{ nebula_user }}/Documents/linux-amd64/nebula"
     dest: "/usr/bin/nebula"
     owner: "root"
     group: "{{ nebula_user }}"
@@ -39,7 +39,7 @@
 
 - name: Install nebula-cert binary
   ansible.builtin.copy:
-    src: "/home/{{ nebula_user}}/Documents/nebula-cert"
+    src: "/home/{{ nebula_user}}/Documents/linux-amd64/nebula-cert"
     dest: "/usr/bin/nebula-cert"
     owner: "root"
     group: "{{ nebula_user }}"
