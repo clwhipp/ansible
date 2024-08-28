@@ -8,9 +8,11 @@
 
 - name: Setup Nebula Binaries
   import_tasks: package-installation.yml
+  when: nebula_package_install
 
 - name: Install Nebula Keys and Certificates
   import_tasks: key-installation.yml
+  when: nebula_inject_keys
 
 - name: Generate Host Configuration
   import_tasks: host-config.yml

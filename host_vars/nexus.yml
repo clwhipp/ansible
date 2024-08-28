@@ -7,3 +7,18 @@ nebula_ip: "10.10.0.12"
 # Common Overrides
 hostname: "nexus"
 fqdn: "{{ hostname }}.{{ domain }}"
+
+# Nebula
+nebula_inbound_rules:
+
+  - port: "{{ ssh_port_v }}"
+    proto: tcp
+    acl_group: admin
+
+  - port: "80"
+    proto: tcp
+    acl_group: media
+
+  - port: "8096"
+    proto: tcp
+    acl_group: media
