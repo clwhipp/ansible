@@ -12,9 +12,6 @@ vaultwarden_data_mounts:
   - location: "{{ data_dir }}/bitwarden"
     owner: "bw"
     mode: '0700'
-  - location: "{{ data_dir }}/ts/bitwarden"
-    owner: "root"
-    mode: '0700'
 
 csr_cn: "Bitwarden"
 svc_domain: "warden.{{ domain }}"

@@ -7,9 +7,6 @@ pihole_data_mounts:
   - location: "{{ data_dir }}/pihole"
     owner: "root"
     mode: '0700'
-  - location: "{{ data_dir }}/ts/pihole"
-    owner: "root"
-    mode: '0700'
   - location: "{{ certs_dir }}"
     owner: "root"
     mode: '0700'

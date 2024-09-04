@@ -22,9 +22,6 @@ nextcloud_data_mounts:
   - location: "{{ data_dir }}/mariadb"
     owner: "db"
     mode: '0700'
-  - location: "{{ data_dir }}/ts/files"
-    owner: "root"
-    mode: '0700'
 
 csr_cn: "Nextcloud"
 svc_domain: "files.{{ domain }}"
