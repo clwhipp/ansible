@@ -2,6 +2,7 @@ ansible_become_pass: "{{ lookup('bitwarden_password', 'nexus_linux_user_password
 user_password: "{{ lookup('bitwarden_field', 'hash', 'nexus_linux_user_password') }}"
 wireguard_ip: "10.0.0.1"
 wireguard_private: "{{ lookup('bitwarden_password','nexus_wireguard_private') }}"
+nebula_ip: "10.10.0.12"
 
 # Common Overrides
 hostname: "nexus"
