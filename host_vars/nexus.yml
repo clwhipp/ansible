@@ -11,7 +11,11 @@ fqdn: "{{ hostname }}.{{ domain }}"
 # Nebula
 nebula_inbound_rules:
 
-  - port: "{{ ssh_port_v }}"
+  - port: "22"
+    proto: tcp
+    acl_group: admin
+
+  - port: "5900"
     proto: tcp
     acl_group: admin
 
@@ -22,3 +26,11 @@ nebula_inbound_rules:
   - port: "8096"
     proto: tcp
     acl_group: media
+
+  - port: "443"
+    proto: tcp
+    acl_group: nextcloud
+
+  - port: "8080"
+    proto: tcp
+    acl_group: bitwarden
