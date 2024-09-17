@@ -37,7 +37,7 @@
 
     # IDrive E2 - Offsite Storage
     idrive_e2_target: "idrive-e2-vaultwarden"
-    idrive_e2_bucket: "borg-bitwarden"
+    idrive_e2_bucket: "vaultwarden-backup"
     idrive_e2_access_key_id: "{{ lookup('bitwarden_field', 'rclone_access_key_id', 'borg - vaultwarden') }}"
     idrive_e2_secret_access_key: "{{ lookup('bitwarden_field', 'rclone_secret_access_key', 'borg - vaultwarden') }}"
 
