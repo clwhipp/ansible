@@ -1,4 +1,4 @@
-vaultwarden_admin_token: "{{ lookup('bitwarden_password', 'EC2 Warden - Admin Token') }}"
+vaultwarden_admin_token: "{{ lookup('bitwarden_password', 'Warden - Admin Token') }}"
 
 vaultwarden_linux_accounts:
   - name: "bw"
