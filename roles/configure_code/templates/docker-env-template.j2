@@ -1,0 +1,8 @@
+# Common
+DATA_DIR={{ data_dir }}
+
+CODE_TLS_CERT_LOCATION="{{ lets_encrypt_dir }}/{{ svc_domain }}/fullchain.pem"
+CODE_TLS_KEY_LOCATION="{{ lets_encrypt_dir }}/{{ svc_domain }}/privkey.pem"
+
+PASSWORD={{ code_password }}
+TAILSCALE_IP={{ system_tailscale_ip }}

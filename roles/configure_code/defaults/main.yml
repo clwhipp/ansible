@@ -1,0 +1,24 @@
+code_password: "{{ lookup('bitwarden_password', 'code_password') }}"
+
+code_linux_accounts:
+  - name: "code"
+    uid: 1600
+    shell: "/sbin/nologin"
+
+code_data_mounts:
+  - location: "{{ data_dir }}"
+    owner: "root"
+    mode: '0755'
+  - location: "{{ data_dir }}/code"
+    owner: "code"
+    mode: '0700'
+  - location: "{{ data_dir }}/code/ssh"
+    owner: "code"
+    mode: '0700'
+  - location: "{{ data_dir }}/code/workspace"
+    owner: "code"
+    mode: '0700'
+
+csr_cn: "Code"
+svc_domain: "code.{{ domain }}"
+svc_account: "code"
