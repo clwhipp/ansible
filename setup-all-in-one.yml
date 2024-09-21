@@ -5,7 +5,7 @@
     - configure_jellyfin
     - configure_nextcloud
     - configure_vaultwarden
-    - configure_pihole
+    - configure_code
     - configure_md_raid
     - configure_iptables
     - configure_wireguard
