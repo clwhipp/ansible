@@ -1,4 +1,4 @@
-- hosts: nexus
+- hosts: nebula_servers
   become: true
   roles:
     - configure_nebula

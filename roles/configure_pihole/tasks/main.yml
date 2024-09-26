@@ -22,3 +22,27 @@
   vars:
     account: "{{ svc_account }}"
     cert_domain: "{{ svc_domain }}"
+
+- name: Set DNS to 1.1.1.1 in resolved.conf
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/resolved.conf
+    regexp: '^#?DNS='
+    line: 'DNS=1.1.1.1'
+
+- name: Disable DNSStubListener in resolved.conf
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/resolved.conf
+    regexp: '^#?DNSStubListener='
+    line: 'DNSStubListener=no'
+
+- name: Create symbolic link for resolv.conf
+  ansible.builtin.file:
+    src: /run/systemd/resolve/resolv.conf
+    dest: /etc/resolv.conf
+    state: link
+    force: yes
+
+- name: Restart systemd-resolved service
+  ansible.builtin.service:
+    name: systemd-resolved
+    state: restarted

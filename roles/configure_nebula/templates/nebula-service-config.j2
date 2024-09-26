@@ -10,7 +10,8 @@ pki:
   # disconnect_invalid is a toggle to force a client to be disconnected if the certificate is expired or invalid.
 
 static_host_map:
-  "10.10.0.1": ["{{ nebula_lighthouse }}:{{ nebula_port }}"]
+  "10.10.0.1": ["{{ nebula_lighthouse_1 }}:{{ nebula_port }}"]
+  "10.10.0.2": ["{{ nebula_lighthouse_2 }}:{{ nebula_port }}"]
 
 lighthouse:
   am_lighthouse: false
@@ -18,6 +19,7 @@ lighthouse:
   
   hosts:
     - "10.10.0.1"
+    - "10.10.0.2"
 
 listen:
   # To listen on both any ipv4 and ipv6 use "::"

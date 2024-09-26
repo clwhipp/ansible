@@ -1,6 +1,7 @@
 nebula_ca_sha: "{{ nebula_ca_sha_v }}"
 nebula_service_restart: false
-nebula_lighthouse: "vpn.{{ domain }}"
+nebula_lighthouse_1: "vpn.{{ domain }}"
+nebula_lighthouse_2: "vpn2.{{ domain }}"
 nebula_is_lighthouse: false
 nebula_user: "nebula"
 nebula_install_dir: "/etc/nebula"

@@ -1,0 +1,11 @@
+- hosts: vpn2
+  become: true
+  roles:
+    - configure_nebula
+    - configure_pihole
+    - configure_iptables
+
+  vars:
+
+  vars_files: 
+    - ../vars/env-secrets.yml
