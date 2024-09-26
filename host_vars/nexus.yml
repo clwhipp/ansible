@@ -34,3 +34,7 @@ nebula_inbound_rules:
   - port: "8080"
     proto: tcp
     acl_group: bitwarden
+
+  - port: "9000"
+    proto: tcp
+    acl_group: development
