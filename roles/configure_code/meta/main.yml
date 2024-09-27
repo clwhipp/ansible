@@ -1,3 +1,2 @@
 dependencies:
-  - configure_tailscale
   - configure_docker_services

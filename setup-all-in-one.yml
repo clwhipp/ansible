@@ -1,16 +1,17 @@
 - hosts: nexus
   become: true
   roles:
-    - configure_tailscale
+    - configure_nebula
     - configure_jellyfin
     - configure_nextcloud
     - configure_vaultwarden
     - configure_code
     - configure_md_raid
     - configure_iptables
-    - configure_wireguard
 
   vars:
+    nebula_inject_keys: false
+    nebula_package_install: false
 
   vars_files: 
     - ../vars/env-secrets.yml
